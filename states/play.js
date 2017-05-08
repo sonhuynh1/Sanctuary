@@ -44,6 +44,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes,boxes);
+		game.physics.arcade.collide(boxes,boxes); // swag monies
 	}
 };
