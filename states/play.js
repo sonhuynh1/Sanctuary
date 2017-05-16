@@ -14,7 +14,7 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width/2; // left box right width coordinate
+		lBRW = game.world.width; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
 	},
 	create:function(){
@@ -28,11 +28,13 @@ var playState = {
 		// make boxes and add them into group
 		boxes = game.add.group();
 		boxes.enableBody = true;
+		boxes.physicsBodyType = Phaser.Physics.ARCADE
+		boxes.enableBody = true;
 		for(var i = 0; i < 50; i++) {
 			var box = new Box(this.game);
 			box.name = i;
 			boxes.add(box);
-			this.game.add.existing(box);
+			//this.game.add.existing(box);
 		}
 		//==============================================
 		// Create hoverData
@@ -46,6 +48,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes,boxes); // swag monies
+		game.physics.arcade.collide(boxes);// swag monies
 	}
 };
