@@ -23,6 +23,9 @@ var Box = function(game){
 	this.body.onWorldBounds = new Phaser.Signal();
 	this.body.onWorldBounds.add(newDest, this);
 
+	// this.body.onCollide = new Phaser.Signal();
+	// this.body.onCollide.add(newDest, this);
+
 	// define constants that affect motion
 	this.SPEED = 50; // pixels/second
 	this.TURN_RATE = 5; // degrees/frame
