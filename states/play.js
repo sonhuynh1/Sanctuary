@@ -19,6 +19,8 @@ var playState = {
 	},
 	create:function(){
 		console.log('playing');
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
 		// allow for mouse input
 		game.input.mouse.capture = true;
 
