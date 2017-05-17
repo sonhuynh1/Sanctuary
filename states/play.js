@@ -30,11 +30,13 @@ var playState = {
 		// make boxes and add them into group
 		boxes = game.add.group();
 		boxes.enableBody = true;
+		boxes.physicsBodyType = Phaser.Physics.ARCADE
+		boxes.enableBody = true;
 		for(var i = 0; i < 50; i++) {
 			var box = new Box(this.game);
 			box.name = i;
 			boxes.add(box);
-			this.game.add.existing(box);
+			//this.game.add.existing(box);
 		}
 		//==============================================
 		// Create hoverData
@@ -48,6 +50,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes); // collide box group with itself
+		//game.physics.arcade.collide(boxes);// swag monies
 	}
 };
