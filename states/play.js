@@ -1,5 +1,5 @@
 // custom variables for game
-var boxes, hoverData;
+var boxes, hoverData, quotaSystem;
 var lBRW, lBBH, lBLW, lBTH; // left box: right width, bottom height, left width, top height
 
 // game on
@@ -30,12 +30,8 @@ var playState = {
 		// make boxes and add them into group
 		boxes = game.add.group();
 		boxes.enableBody = true;
-		for(var i = 0; i < 50; i++) {
-			var box = new Box(this.game);
-			box.name = i;
-			boxes.add(box);
-			this.game.add.existing(box);
-		}
+
+		quotaSystem = new quotaSystem(this.game);
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);
