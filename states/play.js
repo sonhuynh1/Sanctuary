@@ -31,7 +31,8 @@ var playState = {
 		boxes = game.add.group();
 		boxes.enableBody = true;
 
-		quotaSystem = new quotaSystem(this.game);
+		quotaSystem = new Quota(this.game);
+		game.add.existing(quotaSystem);
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);

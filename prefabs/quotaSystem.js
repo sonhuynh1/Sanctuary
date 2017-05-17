@@ -1,16 +1,22 @@
 // quota system
 var Quota = function(game){
+	Phaser.Text.call(this,game,
+		0,0,'',
+		{font:'20px Arial',fill:'#ff0044',align:'center'});
+
 	//  Create our Timer
-    timer = game.time.create(false);
+    this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    timer.loop(2000, updateCounter, this);
+    this.timer.loop(2000, this.showText, this);
 
     //  Start the timer running - this is important!
-    timer.start();
+    this.timer.start();
 };
+Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
-Quota.prototype.pause = function() {
+Quota.prototype.update = function() {
+	game.debug.text('Time until event: ' + this.timer.duration.toFixed(0), 32, 32);
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
@@ -21,6 +27,6 @@ Quota.prototype.createBox = function() {
 		this.game.add.existing(box);
 	}
 };
-Quota.prototype.render = function() {
-    game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+Quota.prototype.showText = function() {
+    //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
 };
