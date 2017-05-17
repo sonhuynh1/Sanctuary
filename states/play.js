@@ -48,5 +48,6 @@ var playState = {
 		}
 
 		// check for collision
+		game.physics.arcade.collide(boxes); // collide box group with itself
 	}
 };
