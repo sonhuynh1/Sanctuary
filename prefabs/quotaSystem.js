@@ -8,15 +8,39 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(2000, this.showText, this);
+    this.timer.loop(99000, this.endLevel, this);
 
-    //  Start the timer running - this is important!
-    this.timer.start();
+    // custom variables for construct
+    this.quota = 0;
+    this.level = 1;
+
+    this.startLevel(this);
 };
 Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
 Quota.prototype.update = function() {
-	game.debug.text('Time until event: ' + this.timer.duration.toFixed(0), 32, 32);
+	// debugging text to show timer and quota
+	game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), 32, 32);
+	game.debug.text('Quota: ' + this.quota, 32, 64);
+};
+Quota.prototype.startLevel = function() {
+	console.log('starting level');
+
+    // create a quota goal
+    this.createGoal(this);
+
+    // create boxes
+    this.createBox(this);
+
+    //  Start the timer running - this is important!
+    this.timer.start();
+};
+Quota.prototype.endLevel = function() {
+	console.log('ending level');
+};
+Quota.prototype.createGoal = function() {
+	console.log('creating goal');
+	this.quota = this.level * 5;
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
@@ -26,7 +50,4 @@ Quota.prototype.createBox = function() {
 		boxes.add(box);
 		this.game.add.existing(box);
 	}
-};
-Quota.prototype.showText = function() {
-    //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
 };
