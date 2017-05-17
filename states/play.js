@@ -14,11 +14,13 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width/2; // left box right width coordinate
+		lBRW = game.world.width; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
 	},
 	create:function(){
 		console.log('playing');
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
 		// allow for mouse input
 		game.input.mouse.capture = true;
 
@@ -46,6 +48,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes,boxes); // swag monies
+		game.physics.arcade.collide(boxes); // collide box group with itself
 	}
 };

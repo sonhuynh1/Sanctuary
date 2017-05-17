@@ -15,10 +15,16 @@ var Box = function(game){
 
 	// enable physics
 	game.physics.enable(this,Phaser.Physics.ARCADE);
+	this.body.collideWorldBounds = true;
+	this.body.onWorldBounds = new Phaser.Signal();
+	this.body.onWorldBounds.add(newDest,this);
+
+	this.body.onCollide = new Phaser.Signal();
+	this.body.onCollide.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 50; // pixels/second
-	this.TURN_RATE = 5; // degrees/frame
+	this.SPEED = 100; // pixels/second
+	this.TURN_RATE = 50; // degrees/frame
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 };
 Box.prototype = Object.create(Phaser.Sprite.prototype);
@@ -28,7 +34,7 @@ Box.prototype.update = function(){
 	if(this.input.pointerOver()){
 		hoverData.hovering(this.name);
 	}
-
+	//===========================================================================
 	// update next destination
 	if(this.DESTINATION[0] - this.x < 5 && this.DESTINATION[1] - this.y < 5){
 		this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
@@ -63,13 +69,18 @@ Box.prototype.update = function(){
 	// calculate velocity based on this.rotation and this.SPEED
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
+	//===========================================================================
 };
+// called when objects collide with wall
+function newDest(box) {
+	box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+}
 // destroy the box
 Box.prototype.death = function(){
 	console.log(this.name);
-	//boxes.remove(this);
+	//boxes.remove(this); // remove box from box group
 	gate.checkBox(this,gate,this.enterGate);
-	//this.destroy();
+	//this.destroy(); // delete box from game
 };
 
 // animation of box when trying to enter gate
