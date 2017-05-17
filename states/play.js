@@ -30,7 +30,7 @@ var playState = {
 		// make boxes and add them into group
 		boxes = game.add.group();
 		boxes.enableBody = true;
-
+    
 		quotaSystem = new quotaSystem(this.game);
 		//==============================================
 		// Create hoverData
@@ -44,6 +44,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes); // collide box group with itself
+		//game.physics.arcade.collide(boxes);// swag monies
 	}
 };

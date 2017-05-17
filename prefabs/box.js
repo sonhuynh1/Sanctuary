@@ -4,20 +4,24 @@ var Box = function(game){
 		game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH),'box');
 	this.tint = game.rnd.between(0,255);
 
+	game.physics.arcade.enable(this);
+	this.body.collideWorldBounds = true;
+	this.body.bounce.x = 10;
+	this.body.bounce.y = 10;
+
+
 	// enable to be clicked or hovered over
     this.inputEnabled = true;
     //this.events.onInputDown.add(this.death,this);
-	
+
 	// set the pivot point to be the center and alter size
 	this.anchor.setTo(0.5,0.5);
 	var real = game.rnd.realInRange(0.5,1.5);
 	this.scale.setTo(real,real);
 
-	// enable physics
-	game.physics.enable(this,Phaser.Physics.ARCADE);
-	this.body.collideWorldBounds = true;
+	//call back
 	this.body.onWorldBounds = new Phaser.Signal();
-	this.body.onWorldBounds.add(newDest,this);
+	this.body.onWorldBounds.add(newDest, this);
 
 	//this.body.onCollide = new Phaser.Signal();
 	//this.body.onCollide.add(newDest,this);
@@ -27,8 +31,11 @@ var Box = function(game){
 	this.TURN_RATE = 50; // degrees/frame
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 };
+
 Box.prototype = Object.create(Phaser.Sprite.prototype);
 Box.constructor = Box;
+
+
 Box.prototype.update = function(){
 	// when pointer is over object
 	if(this.input.pointerOver()){
@@ -83,6 +90,14 @@ Box.prototype.death = function(){
 	//this.destroy(); // delete box from game
 };
 
+function newDest(box){
+	console.log(box.name + "Hit");
+	// if(box.x >= game.world.centerX){
+	// 	box.DESTINATION /= 2; //[game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+	// }else{
+		box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+	//}
+}
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){
 	console.log('moving box ' + box.name);
