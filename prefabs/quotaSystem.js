@@ -13,6 +13,8 @@ var Quota = function(game){
     // custom variables for construct
     this.quota = 0;
     this.level = 1;
+    this.result = []; // grey, red, empty
+    this.vetted = [][];
 
     this.startLevel(this);
 };
@@ -27,7 +29,7 @@ Quota.prototype.startLevel = function() {
 	console.log('starting level');
 
     // create a quota goal
-    this.createGoal(this);
+    this.createGoalnTime(this);
 
     // create boxes
     this.createBox(this);
@@ -38,7 +40,7 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 };
-Quota.prototype.createGoal = function() {
+Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
 	this.quota = this.level * 5;
 };
