@@ -4,26 +4,64 @@ var Box = function(game){
 		game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH),'box');
 	this.tint = game.rnd.between(0,255);
 
+	game.physics.arcade.enable(this);
+	this.body.collideWorldBounds = true;
+	this.body.bounce.x = 10;
+	this.body.bounce.y = 10;
+
+
 	// enable to be clicked or hovered over
     this.inputEnabled = true;
     //this.events.onInputDown.add(this.death,this);
-	
+
 	// set the pivot point to be the center and alter size
 	this.anchor.setTo(0.5,0.5);
 	var real = game.rnd.realInRange(0.5,1.5);
 	this.scale.setTo(real,real);
+	
+	//looks at the real variable and determines a appropiate random age
+	//based on the scale, or the random "real" value
+	if (real <= 0.6 && real >= 0.5) {
+		this.name = game.rnd.integerInRange(1, 10);
+	} else if (real <= 0.7 && real > 0.6){
+		this.name = game.rnd.integerInRange(11, 20);
+	} else if (real <= 0.8 && real > 0.7){
+		this.name = game.rnd.integerInRange(21, 30);
+	} else if (real <= 0.9 && real > 0.8){
+		this.name = game.rnd.integerInRange(31, 40);
+	} else if (real <= 1.0 && real > 0.9){
+		this.name = game.rnd.integerInRange(41, 50);
+	} else if (real <= 1.1 && real > 1.0){
+		this.name = game.rnd.integerInRange(51, 60);
+	} else if (real <= 1.2 && real > 1.1){
+		this.name = game.rnd.integerInRange(61, 70);
+	} else if (real <= 1.3 && real > 1.2){
+		this.name = game.rnd.integerInRange(71, 80);
+	} else if (real <= 1.4 && real > 1.3){
+		this.name = game.rnd.integerInRange(81, 90);
+	} else if (real <= 1.4 && real > 1.3){
+		this.name = game.rnd.integerInRange(91, 100);
+	} else {
+		this.name = game.rnd.integerInRange(101, 110);
+	}
 
-	// enable physics
-	game.physics.enable(this,Phaser.Physics.ARCADE);
+	//call back
+	this.body.onWorldBounds = new Phaser.Signal();
+	this.body.onWorldBounds.add(newDest, this);
+
+	//this.body.onCollide = new Phaser.Signal();
+	//this.body.onCollide.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 50; // pixels/second
-	this.TURN_RATE = 5; // degrees/frame
+	this.SPEED = 100; // pixels/second
+	this.TURN_RATE = 50; // degrees/frame
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
+
 };
 Box.prototype = Object.create(Phaser.Sprite.prototype);
 Box.constructor = Box;
 Box.prototype.update = function(){
+
 	// when pointer is over object
 	if(this.input.pointerOver()){
 		hoverData.hovering(this.name);
@@ -64,14 +102,25 @@ Box.prototype.update = function(){
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 };
+// called when objects collide with wall
+function newDest(box) {
+	box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+}
 // destroy the box
 Box.prototype.death = function(){
 	console.log(this.name);
-	//boxes.remove(this);
+	//boxes.remove(this); // remove box from box group
 	gate.checkBox(this,gate,this.enterGate);
-	//this.destroy();
+	//this.destroy(); // delete box from game
 };
 
+function newDest(box){
+	// if(box.x >= game.world.centerX){
+	// 	box.DESTINATION /= 2; //[game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+	// }else{
+		box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
+	//}
+}
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){
 	console.log('moving box ' + box.name);
