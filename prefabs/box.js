@@ -2,18 +2,13 @@
 var Box = function(game){
 	Phaser.Sprite.call(this,game,
 		game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH),'box');
-	this.tint = game.rnd.between(0,255);
-
-	game.physics.arcade.enable(this);
-	this.body.collideWorldBounds = true;
-	this.body.bounce.x = 10;
-	this.body.bounce.y = 10;
-
+	this.ptint = game.rnd.between(0,255);
+	this.tint = this.ptint;
 
 	// enable to be clicked or hovered over
     this.inputEnabled = true;
     //this.events.onInputDown.add(this.death,this);
-
+	
 	// set the pivot point to be the center and alter size
 	this.anchor.setTo(0.5,0.5);
 	var real = game.rnd.realInRange(0.5,1.5);
@@ -45,12 +40,11 @@ var Box = function(game){
 		this.name = game.rnd.integerInRange(101, 110);
 	}
 
-	//call back
+	// enable physics
+	game.physics.enable(this,Phaser.Physics.ARCADE);
+	this.body.collideWorldBounds = true;
 	this.body.onWorldBounds = new Phaser.Signal();
-	this.body.onWorldBounds.add(newDest, this);
-
-	//this.body.onCollide = new Phaser.Signal();
-	//this.body.onCollide.add(newDest,this);
+	this.body.onWorldBounds.add(newDest,this);
 
 	// define constants that affect motion
 	this.SPEED = 100; // pixels/second
@@ -58,14 +52,14 @@ var Box = function(game){
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
 };
+
 Box.prototype = Object.create(Phaser.Sprite.prototype);
 Box.constructor = Box;
 Box.prototype.update = function(){
 
-	// when pointer is over object
-	if(this.input.pointerOver()){
-		hoverData.hovering(this.name);
-	}
+	this.events.onInputOver.add(overSprite, this);
+	this.events.onInputOut.add(outSprite, this);
+	this.events.onInputDown.add(click, this);
 
 	// update next destination
 	if(this.DESTINATION[0] - this.x < 5 && this.DESTINATION[1] - this.y < 5){
@@ -101,26 +95,49 @@ Box.prototype.update = function(){
 	// calculate velocity based on this.rotation and this.SPEED
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
+
+	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from 
+        //boxes.remove(this);
+       	this.destroy();
+    }
 };
+
 // called when objects collide with wall
 function newDest(box) {
+	if (!box.inputEnabled) {console.log('newDest');}
 	box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
 }
+
+function overSprite() {
+	this.tint = 0x7a7a7a;
+	hoverData.hovering(this.name);
+}
+
+function outSprite() {
+	this.tint = this.ptint;
+}
+
+function click (box) {
+	this.tint = 0xff0000;
+	this.DESTINATION = [game.world.width,game.world.height/2];
+	//this.SPEED = 0;
+	//this.TURN_RATE = 0;
+	this.inputEnabled = false;
+	this.body.checkCollision.right = false;
+	//this.input.onDown.remove(newDest, this);
+	this.body.collideWorldBounds = false;
+	//this.outOfBoundsKill = true;
+	//this.body.onWorldBounds.remove(newDest);
+}
+
 // destroy the box
 Box.prototype.death = function(){
 	console.log(this.name);
-	//boxes.remove(this); // remove box from box group
+	//boxes.remove(this);
 	gate.checkBox(this,gate,this.enterGate);
-	//this.destroy(); // delete box from game
+	//this.destroy();
 };
 
-function newDest(box){
-	// if(box.x >= game.world.centerX){
-	// 	box.DESTINATION /= 2; //[game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
-	// }else{
-		box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
-	//}
-}
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){
 	console.log('moving box ' + box.name);
