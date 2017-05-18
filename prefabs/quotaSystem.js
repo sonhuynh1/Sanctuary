@@ -37,7 +37,7 @@ Quota.prototype.startLevel = function() {
     //  Start the timer running - this is important!
     this.timer.start();
 
-    this.endLevel(this);
+    //this.endLevel(this);
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
