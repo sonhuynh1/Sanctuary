@@ -16,6 +16,9 @@ var playState = {
 		lBTH = 0; // left box top height coordinate
 		lBRW = game.world.width; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
+		ageG1 = 15 // age limit young
+		ageG2 = 25 // age limit young adult
+		ageG3 = 35 // adult/senior
 	},
 	create:function(){
 		console.log('playing');
@@ -30,8 +33,9 @@ var playState = {
 		// make boxes and add them into group
 		boxes = game.add.group();
 		boxes.enableBody = true;
-    
-		quotaSystem = new quotaSystem(this.game);
+
+		quotaSystem = new Quota(this.game);
+		game.add.existing(quotaSystem);
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);
