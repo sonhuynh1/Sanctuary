@@ -71,7 +71,6 @@ Quota.prototype.createBox = function() {
 	for(var i = 0; i < 50; i++) {
 		var box = new Box(this.game);
 		boxes.add(box);
-		console.log(box.name);
 		if(this.boxArr[box.name]) {
 			this.boxArr[box.name].push(box);
 		} else {
