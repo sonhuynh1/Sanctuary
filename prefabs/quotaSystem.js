@@ -14,7 +14,7 @@ var Quota = function(game){
     this.quota = 0;
     this.level = 1;
     this.result = []; // grey, red, empty
-    this.vetted = [][];
+    this.vetted = [];
 
     this.startLevel(this);
 };
@@ -36,9 +36,18 @@ Quota.prototype.startLevel = function() {
 
     //  Start the timer running - this is important!
     this.timer.start();
+
+    this.endLevel(this);
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
+	
+	this.report = game.add.sprite(0,0,'box');
+	this.report.tint = (128,128,128);
+	this.report.width = game.world.width;
+	this.report.height = game.world.height;
+
+	this.timer.stop();
 };
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
