@@ -58,11 +58,8 @@ var Box = function(game){
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
 };
-
 Box.prototype = Object.create(Phaser.Sprite.prototype);
 Box.constructor = Box;
-
-
 Box.prototype.update = function(){
 
 	// when pointer is over object
