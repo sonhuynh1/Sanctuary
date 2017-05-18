@@ -115,7 +115,6 @@ Box.prototype.death = function(){
 };
 
 function newDest(box){
-	console.log(box.name + "Hit");
 	// if(box.x >= game.world.centerX){
 	// 	box.DESTINATION /= 2; //[game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
 	// }else{
