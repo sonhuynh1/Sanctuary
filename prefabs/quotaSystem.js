@@ -47,7 +47,7 @@ Quota.prototype.endLevel = function() {
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
 
-	this.timer.stop(); // sweg
+	this.timer.stop(); // sweggity
 };
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
