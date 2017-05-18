@@ -96,14 +96,15 @@ Box.prototype.update = function(){
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 
-	//if (this.body.x >= 780){ // if the sprite is over 800.x width, remove from 
+	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from 
         //boxes.remove(this);
-        //this.destroy();
-    //}
+       	this.destroy();
+    }
 };
 
 // called when objects collide with wall
 function newDest(box) {
+	if (!box.inputEnabled) {console.log('newDest');}
 	box.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)];
 }
 
@@ -123,10 +124,10 @@ function click (box) {
 	//this.TURN_RATE = 0;
 	this.inputEnabled = false;
 	this.body.checkCollision.right = false;
-	this.input.onDown.remove(newDest, this);
-	//this.body.collideWorldBounds = false;
-	this.checkWorldBounds = true;
-	this.outOfBoundsKill = true;
+	//this.input.onDown.remove(newDest, this);
+	this.body.collideWorldBounds = false;
+	//this.outOfBoundsKill = true;
+	//this.body.onWorldBounds.remove(newDest);
 }
 
 // destroy the box
