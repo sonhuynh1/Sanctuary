@@ -35,11 +35,11 @@ Quota.prototype.update = function() {
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
 
-    // create a quota goal
-    this.createGoalnTime(this);
-
     // create boxes
     this.createBox(this);
+
+    // create a quota goal
+    this.createGoalnTime(this);
 
     //  Start the timer running - this is important!
     this.timer.start();
@@ -59,18 +59,28 @@ Quota.prototype.endLevel = function() {
 };
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
-	this.quota = this.level * game.rnd.between(2,5);
+	this.quota = this.level * game.rnd.between(5,10);
 
-	var vettedQuantity = this.quota / game.rnd.between(.1,.5);
-	//while(vettedQuantity != 0) {
+	var ran = game.rnd.realInRange(.5,1);
+	var vettedQuantity = Math.ceil(this.quota * ran);
+
+	console.log('Vetted Quant: ' + vettedQuantity + ': ' + this.quota + '*' + ran);
+	while(vettedQuantity >= 0) {
 		/*
 		create a random number while the age range of 1-100
 		check if there exists a box with that age
 		if there exists then add it to the vetted array and decrement vettedQuantity
 		if not then generate another number
 		*/
-
-	//}
+		var random = game.rnd.between(1,100);
+		if(this.boxArr[random]){
+			console.log(random + ' exists');
+			this.vetted.push(random);
+			vettedQuantity--;
+		}
+		console.log(vettedQuantity);
+	}
+	console.log(this.vetted);
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
@@ -85,4 +95,9 @@ Quota.prototype.createBox = function() {
 		}
 		this.game.add.existing(box);
 	}
+	console.log(this.boxArr);
+};
+Quota.prototype.updateVetted = function(name) {
+	// checks box against vetted
+	console.log('updating vetted ' + name);
 };
