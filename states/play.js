@@ -14,7 +14,7 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width; // left box right width coordinate
+		lBRW = game.world.width/1.5; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
 		ageG1 = 15 // age limit young
 		ageG2 = 25 // age limit young adult
@@ -22,7 +22,6 @@ var playState = {
 	},
 	create:function(){
 		console.log('playing');
-		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		// allow for mouse input
 		game.input.mouse.capture = true;
@@ -42,11 +41,6 @@ var playState = {
 		game.add.existing(hoverData);
 	},
 	update:function(){
-		// if LMB is clicked, then start game
-		if(game.input.activePointer.leftButton.isDown){
-			//game.state.start('end');
-		}
-
 		// check for collision
 		//game.physics.arcade.collide(boxes);// swag monies
 	}

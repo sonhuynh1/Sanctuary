@@ -98,7 +98,7 @@ Box.prototype.update = function(){
 
 	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from 
         //boxes.remove(this);
-       	this.destroy();
+       	this.death(this);
     }
 };
 
@@ -118,8 +118,9 @@ function outSprite() {
 }
 
 function click (box) {
+	console.log('clicked on ' + this.name);
 	this.tint = 0xff0000;
-	this.DESTINATION = [game.world.width,game.world.height/2];
+	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
 	//this.SPEED = 0;
 	//this.TURN_RATE = 0;
 	this.inputEnabled = false;
@@ -128,14 +129,14 @@ function click (box) {
 	this.body.collideWorldBounds = false;
 	//this.outOfBoundsKill = true;
 	//this.body.onWorldBounds.remove(newDest);
+	quotaSystem.updateVetted(this.name);
 }
 
 // destroy the box
 Box.prototype.death = function(){
-	console.log(this.name);
-	//boxes.remove(this);
-	gate.checkBox(this,gate,this.enterGate);
-	//this.destroy();
+	console.log('death to ' + this.name);
+	boxes.remove(this);
+	this.destroy();
 };
 
 // animation of box when trying to enter gate
