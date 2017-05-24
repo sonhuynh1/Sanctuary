@@ -28,9 +28,13 @@ Quota.prototype.update = function() {
 	if(this.status != 'end'){
 		game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), 32, 32);
 		game.debug.text('Quota: ' + this.quota, 32, 64);
+		game.debug.text('Vetted: ' + this.vetted, 32, 96);
+		game.debug.text('Result: ' + this.result, 32, 128);
 	} else {
 		game.debug.text('', 32, 32); // removes debugging text
 	}
+
+
 };
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
@@ -58,14 +62,16 @@ Quota.prototype.endLevel = function() {
 	this.status = 'end';
 	this.timer.stop();
 };
+
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
 	this.quota = (this.level * game.rnd.between(2,5));
+	this.result.length = this.quota;
 	var vettedQuantity = Math.ceil(this.quota * game.rnd.realInRange(.3,.5));
 	this.vetted.length = vettedQuantity;
 	console.log("length" + this.vetted.length);
 	while(vettedQuantity >= 0) {
-			var random = game.rnd.between(1,110);
+			var random = game.rnd.between(1,90);
  			if(this.boxArr[random]){
 					this.vetted[vettedQuantity] = random;
 					// console.log("random" + random)
@@ -83,12 +89,15 @@ Quota.prototype.createGoalnTime = function() {
 		if not then generate another number
 		*/
 
-
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
-	for(var i = 0; i < 50; i++) {
+	for(var i = 0; i < 25; i++) {
 		var box = new Box(this.game);
+		var ran = game.rnd.between(0,1);
+		if(ran == 0){
+			box.GOOD = true;
+		}
 		boxes.add(box);
 		if(this.boxArr[box.name]) {
 			this.boxArr[box.name].push(box);
@@ -99,4 +108,19 @@ Quota.prototype.createBox = function() {
 		this.game.add.existing(box);
 	}
 	console.log("CreateBox")
+};
+Quota.prototype.updateVetted = function(box) {
+	// checks box against vetted
+	console.log('updating vetted ' + box.name);
+	for(i = 0; i <= this.vetted.length; i++){
+		if(this.vetted[i] == box.name){
+			box.GOOD = true;
+			this.result.push("grey");
+			console.log(true);
+		}
+	}
+	if(box.GOOD == false){
+		this.result.push("red");
+	}
+	
 };
