@@ -8,7 +8,7 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(3000, this.endLevel, this);
+    this.timer.loop(33000, this.endLevel, this);
 
     // custom variables for construct
     this.quota = 0;

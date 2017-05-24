@@ -14,7 +14,7 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width; // left box right width coordinate
+		lBRW = game.world.width/1.5; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
 		ageG1 = 15 // age limit young
 		ageG2 = 25 // age limit young adult
