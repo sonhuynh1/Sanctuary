@@ -118,8 +118,9 @@ function outSprite() {
 }
 
 function click (box) {
+	console.log('clicked on ' + this.name);
 	this.tint = 0xff0000;
-	this.DESTINATION = [game.world.width,game.world.height/2];
+	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
 	//this.SPEED = 0;
 	//this.TURN_RATE = 0;
 	this.inputEnabled = false;
@@ -132,7 +133,7 @@ function click (box) {
 
 // destroy the box
 Box.prototype.death = function(){
-	console.log(this.name);
+	console.log('death to ' + this.name);
 	//boxes.remove(this);
 	gate.checkBox(this,gate,this.enterGate);
 	//this.destroy();
