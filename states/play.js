@@ -16,6 +16,9 @@ var playState = {
 		lBTH = 0; // left box top height coordinate
 		lBRW = game.world.width; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
+		ageG1 = 15 // age limit young
+		ageG2 = 25 // age limit young adult
+		ageG3 = 35 // adult/senior
 	},
 	create:function(){
 		console.log('playing');
@@ -45,6 +48,6 @@ var playState = {
 		}
 
 		// check for collision
-		game.physics.arcade.collide(boxes); // collide box group with itself
+		//game.physics.arcade.collide(boxes);// swag monies
 	}
 };

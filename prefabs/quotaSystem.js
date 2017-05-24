@@ -15,7 +15,9 @@ var Quota = function(game){
     this.level = 1;
     this.result = []; // grey, red, empty
     this.vetted = [];
+    this.boxArr = {};
 
+    console.log('end of quota create');
     this.startLevel(this);
     this.status = 'running';
 };
@@ -57,14 +59,30 @@ Quota.prototype.endLevel = function() {
 };
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
-	this.quota = this.level * 5;
+	this.quota = this.level * game.rnd.between(2,5);
+
+	var vettedQuantity = this.quota / game.rnd.between(.1,.5);
+	//while(vettedQuantity != 0) {
+		/*
+		create a random number while the age range of 1-100
+		check if there exists a box with that age
+		if there exists then add it to the vetted array and decrement vettedQuantity
+		if not then generate another number
+		*/
+
+	//}
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
 	for(var i = 0; i < 50; i++) {
 		var box = new Box(this.game);
-		box.name = i;
 		boxes.add(box);
+		if(this.boxArr[box.name]) {
+			this.boxArr[box.name].push(box);
+		} else {
+			this.boxArr[box.name] = [];
+			this.boxArr[box.name].push(box);
+		}
 		this.game.add.existing(box);
 	}
 };
