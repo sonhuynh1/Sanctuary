@@ -38,8 +38,6 @@ Quota.prototype.update = function() {
 };
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
-
-
     // create boxes
     this.createBox(this);
 
@@ -82,13 +80,6 @@ Quota.prototype.createGoalnTime = function() {
 	console.log(this.vetted);
 	console.log(this.vetted[1]);
 
-		/*
-		create a random number while the age range of 1-100
-		check if there exists a box with that age
-		if there exists then add it to the vetted array and decrement vettedQuantity
-		if not then generate another number
-		*/
-
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
@@ -122,5 +113,5 @@ Quota.prototype.updateVetted = function(box) {
 	if(box.GOOD == false){
 		this.result.push("red");
 	}
-	
+
 };

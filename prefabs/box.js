@@ -95,7 +95,7 @@ Box.prototype.update = function(){
 
 	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from
         //boxes.remove(this);
-       	this.destroy();
+       	this.death(this);
     }
 };
 
@@ -126,15 +126,15 @@ function click (box) {
 	this.body.collideWorldBounds = false;
 	//this.outOfBoundsKill = true;
 	//this.body.onWorldBounds.remove(newDest);
+
 	quotaSystem.updateVetted(this);
 }
 
 // destroy the box
 Box.prototype.death = function(){
 	console.log('death to ' + this.name);
-	//boxes.remove(this);
-	gate.checkBox(this,gate,this.enterGate);
-	//this.destroy();
+	boxes.remove(this);
+	this.destroy();
 };
 
 // animation of box when trying to enter gate

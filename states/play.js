@@ -22,7 +22,6 @@ var playState = {
 	},
 	create:function(){
 		console.log('playing');
-		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		// allow for mouse input
 		game.input.mouse.capture = true;
@@ -42,11 +41,6 @@ var playState = {
 		game.add.existing(hoverData);
 	},
 	update:function(){
-		// if LMB is clicked, then start game
-		if(game.input.activePointer.leftButton.isDown){
-			//game.state.start('end');
-		}
-
 		// check for collision
 		//game.physics.arcade.collide(boxes);// swag monies
 	}
