@@ -31,8 +31,10 @@ Quota.prototype.update = function() {
 	} else {
 		game.debug.text('', 32, 32); // removes debugging text
 		if(game.input.onDown){
+			console.log('Resetting');
 			//this.report.destroy();
 			//this.startLevel(this);
+			this.status = 'running';
 		}
 	}
 };
@@ -47,23 +49,25 @@ Quota.prototype.startLevel = function() {
 
     //  Start the timer running - this is important!
     this.timer.start();
-
-    //this.endLevel(this);
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 	
+	/*
 	this.report = game.add.sprite(0,0,'box');
 	this.report.tint = (128,128,128);
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
-
+	*/
 	this.status = 'end';
-	console.log('this.boxArr: ' + this.boxArr);
+	console.log('ending');
+	console.log(this.boxArr);
+	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
 	boxes.removeAll(true);
+	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
 	this.timer.stop();
-	console.log('boxes: ' + boxes);
-	console.log('this.boxArr: ' + this.boxArr);
+	console.log(boxes);
+	console.log(this.boxArr);
 };
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
@@ -92,8 +96,8 @@ Quota.prototype.createGoalnTime = function() {
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
-	for(var i = 0; i < 50; i++) {
-		var box = new Box(this.game);
+	for(var i = 0; i < 10; i++) {
+		var box = new Box(game);
 		boxes.add(box);
 		if(this.boxArr[box.name]) {
 			this.boxArr[box.name].push(box);
@@ -103,6 +107,11 @@ Quota.prototype.createBox = function() {
 		}
 		this.game.add.existing(box);
 	}
+	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
+
+	console.log('boxes: ');
+	console.log(boxes);
+	console.log('this.boxArr: ');
 	console.log(this.boxArr);
 };
 Quota.prototype.updateVetted = function(name) {
