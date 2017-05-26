@@ -8,12 +8,12 @@ var Box = function(game){
 	// enable to be clicked or hovered over
     this.inputEnabled = true;
     //this.events.onInputDown.add(this.death,this);
-	
+
 	// set the pivot point to be the center and alter size
 	this.anchor.setTo(0.5,0.5);
 	var real = game.rnd.realInRange(0.5,1.5);
 	this.scale.setTo(real,real);
-	
+
 	//looks at the real variable and determines a appropiate random age
 	//based on the scale, or the random "real" value
 	if (real <= 0.6 && real >= 0.5) {
@@ -32,12 +32,8 @@ var Box = function(game){
 		this.name = game.rnd.integerInRange(61, 70);
 	} else if (real <= 1.3 && real > 1.2){
 		this.name = game.rnd.integerInRange(71, 80);
-	} else if (real <= 1.4 && real > 1.3){
+	} else{
 		this.name = game.rnd.integerInRange(81, 90);
-	} else if (real <= 1.4 && real > 1.3){
-		this.name = game.rnd.integerInRange(91, 100);
-	} else {
-		this.name = game.rnd.integerInRange(101, 110);
 	}
 
 	// enable physics
@@ -47,8 +43,9 @@ var Box = function(game){
 	this.body.onWorldBounds.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 100; // pixels/second
+	this.SPEED = 10; // pixels/second
 	this.TURN_RATE = 50; // degrees/frame
+	this.GOOD = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
 };
@@ -96,7 +93,7 @@ Box.prototype.update = function(){
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 
-	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from 
+	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from
         //boxes.remove(this);
        	this.death(this);
     }
@@ -129,7 +126,8 @@ function click (box) {
 	this.body.collideWorldBounds = false;
 	//this.outOfBoundsKill = true;
 	//this.body.onWorldBounds.remove(newDest);
-	quotaSystem.updateVetted(this.name);
+
+	quotaSystem.updateVetted(this);
 }
 
 // destroy the box
