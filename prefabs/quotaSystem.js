@@ -80,7 +80,7 @@ Quota.prototype.endLevel = function() {
 Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
 	this.quota = (this.level * game.rnd.between(2,5));
-	this.result.length = this.quota;
+	// this.result.length = this.quota;
 	var vettedQuantity = Math.ceil(this.quota * game.rnd.realInRange(.3,.5));
 	this.vetted.length = vettedQuantity;
 	console.log("length" + this.vetted.length);
@@ -88,6 +88,10 @@ Quota.prototype.createGoalnTime = function() {
 			var random = game.rnd.between(1,90);
  			if(this.boxArr[random]){
 					this.vetted[vettedQuantity] = random;
+					var test = this.boxArr[random];
+					console.log(test[0].VETTED);
+					test[0].VETTED = true;
+					console.log(test[0].VETTED);
 					// console.log("random" + random)
 					// console.log("vetted" + this.vetted[vettedQuantity]);
 					vettedQuantity--;
@@ -105,7 +109,7 @@ Quota.prototype.createBox = function() {
 =======
 	for(var i = 0; i < 25; i++) {
 		var box = new Box(this.game);
-		var ran = game.rnd.between(0,1);
+		var ran = game.rnd.between(0,3);
 		if(ran == 0){
 			box.GOOD = true;
 		}
@@ -132,9 +136,9 @@ Quota.prototype.createBox = function() {
 };
 Quota.prototype.updateVetted = function(box) {
 	// checks box against vetted
-	console.log('updating vetted ' + box.name);
+	console.log('updating vetted ' + box.VETTED);
 	for(i = 0; i <= this.vetted.length; i++){
-		if(this.vetted[i] == box.name){
+		if(this.vetted[i] == box.name && box.VETTED == true){
 			box.GOOD = true;
 			this.result.push("grey");
 			console.log(true);
@@ -142,6 +146,8 @@ Quota.prototype.updateVetted = function(box) {
 	}
 	if(box.GOOD == false){
 		this.result.push("red");
+	}else if(box.GOOD == true && box.VETTED == false){
+		this.result.push("grey");
 	}
 
 };

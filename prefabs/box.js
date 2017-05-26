@@ -46,6 +46,7 @@ var Box = function(game){
 	this.SPEED = 10; // pixels/second
 	this.TURN_RATE = 50; // degrees/frame
 	this.GOOD = false;
+	this.VETTED = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
 };
