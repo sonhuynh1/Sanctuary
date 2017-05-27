@@ -5,7 +5,7 @@ Author: Son Huynh
 */
 
 // create the game
-var game = new Phaser.Game(800,400,Phaser.AUTO,'');
+var game = new Phaser.Game(window.outerWidth,window.outerHeight-200,Phaser.AUTO,'');
 
 // add all game states
 game.state.add('boot',bootState);

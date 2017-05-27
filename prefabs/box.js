@@ -43,7 +43,7 @@ var Box = function(game){
 	this.body.onWorldBounds.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 10; // pixels/second
+	this.SPEED = 100; // pixels/second
 	this.TURN_RATE = 50; // degrees/frame
 	this.GOOD = false;
 	this.VETTED = false;

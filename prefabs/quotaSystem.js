@@ -8,7 +8,7 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(3000, this.endLevel, this);
+    this.timer.loop(33000, this.endLevel, this);
 
     // custom variables for construct
     this.quota = 0;
@@ -26,18 +26,12 @@ Quota.constructor = Quota;
 Quota.prototype.update = function() {
 	// debugging text to show timer and quota
 	if(this.status != 'end'){
-		game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), 32, 32);
-		game.debug.text('Quota: ' + this.quota, 32, 64);
-		game.debug.text('Vetted: ' + this.vetted, 32, 96);
-		game.debug.text('Result: ' + this.result, 32, 128);
+		game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), game.world.width-250, 32);
+		game.debug.text('Quota: ' + this.quota, game.world.width-250, 64);
+		game.debug.text('Vetted: ' + this.vetted, game.world.width-250, 96);
+		game.debug.text('Result: ' + this.result, game.world.width-250, 128);
 	} else {
 		game.debug.text('', 32, 32); // removes debugging text
-		if(game.input.onDown){
-			console.log('Resetting');
-			//this.report.destroy();
-			//this.startLevel(this);
-			this.status = 'running';
-		}
 	}
 
 
@@ -52,29 +46,19 @@ Quota.prototype.startLevel = function() {
 
     //  Start the timer running - this is important!
     this.timer.start();
+
+    //this.endLevel(this);
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
-<<<<<<< HEAD
-	
-	/*
-=======
 
->>>>>>> origin/QuotaSystem-end&update
 	this.report = game.add.sprite(0,0,'box');
 	this.report.tint = (128,128,128);
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
-	*/
+
 	this.status = 'end';
-	console.log('ending');
-	console.log(this.boxArr);
-	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
-	boxes.removeAll(true);
-	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
 	this.timer.stop();
-	console.log(boxes);
-	console.log(this.boxArr);
 };
 
 Quota.prototype.createGoalnTime = function() {
@@ -103,17 +87,12 @@ Quota.prototype.createGoalnTime = function() {
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
-<<<<<<< HEAD
-	for(var i = 0; i < 10; i++) {
-		var box = new Box(game);
-=======
 	for(var i = 0; i < 25; i++) {
 		var box = new Box(this.game);
 		var ran = game.rnd.between(0,3);
 		if(ran == 0){
 			box.GOOD = true;
 		}
->>>>>>> origin/QuotaSystem-end&update
 		boxes.add(box);
 		if(this.boxArr[box.name]) {
 			this.boxArr[box.name].push(box);
@@ -123,16 +102,7 @@ Quota.prototype.createBox = function() {
 		}
 		this.game.add.existing(box);
 	}
-<<<<<<< HEAD
-	console.log('Total boxes: ' + boxes.RETURN_TOTAL);
-
-	console.log('boxes: ');
-	console.log(boxes);
-	console.log('this.boxArr: ');
-	console.log(this.boxArr);
-=======
 	console.log("CreateBox")
->>>>>>> origin/QuotaSystem-end&update
 };
 Quota.prototype.updateVetted = function(box) {
 	// checks box against vetted
