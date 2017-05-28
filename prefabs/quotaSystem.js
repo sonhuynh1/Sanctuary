@@ -54,12 +54,29 @@ Quota.prototype.endLevel = function() {
 	while(this.result.length < this.quota){
 			this.result.push("empty");
 	}
+/*
 	this.report = game.add.sprite(0,0,'box');
 	this.report.tint = (128,128,128);
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
+	*/
 	game.debug.text('Result: ' + this.result, game.world.width-550, 128);
-	console.log(this.pickedBoxes)
+	console.log(this.pickedBoxes);
+
+	for(var key in this.boxArr){
+		var arr = this.boxArr[key];
+		console.log(arr[0].name);
+		for(var i = 0; i < arr.length; i++){
+			if(arr[i].inputEnabled){
+				arr[i].death(arr[i]);
+			} else {
+				arr[i].SPEED = 0;
+				arr[i].TURN_RATE = 0;
+				arr[i].angle = 0;
+			}
+		}
+	}
+
 	this.status = 'end';
 	this.timer.stop();
 };

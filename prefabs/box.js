@@ -96,7 +96,7 @@ Box.prototype.update = function(){
 
 	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from
         //boxes.remove(this);
-       	this.death(this);
+       	this.picked(this);
     }
 };
 
@@ -119,8 +119,6 @@ function click (box) {
 	console.log('clicked on ' + this.name);
 	this.tint = 0xff0000;
 	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
-	//this.SPEED = 0;
-	//this.TURN_RATE = 0;
 	this.inputEnabled = false;
 	this.body.checkCollision.right = false;
 	//this.input.onDown.remove(newDest, this);
@@ -137,6 +135,14 @@ Box.prototype.death = function(){
 	boxes.remove(this);
 	this.destroy();
 };
+
+// retain box elsewhere
+Box.prototype.picked = function(){
+	this.SPEED = 0;
+	this.TURN_RATE = 0;
+	//this.x = game.world.width + this.width;
+	this.angle = 0;
+}
 
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){
