@@ -39,6 +39,7 @@ var playState = {
 		// Create hoverData
 		hoverData = new HoverData(this.game);
 		game.add.existing(hoverData);
+
 	},
 	update:function(){
 		// check for collision

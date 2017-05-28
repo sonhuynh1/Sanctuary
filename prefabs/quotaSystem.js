@@ -8,12 +8,13 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(33000, this.endLevel, this);
+    this.timer.loop(5000, this.endLevel, this);
 
     // custom variables for construct
     this.quota = 0;
     this.level = 1;
     this.result = []; // grey, red, empty
+		this.pickedBoxes = [];
     this.vetted = [];
     this.boxArr = {};
 
@@ -29,7 +30,6 @@ Quota.prototype.update = function() {
 		game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), game.world.width-250, 32);
 		game.debug.text('Quota: ' + this.quota, game.world.width-250, 64);
 		game.debug.text('Vetted: ' + this.vetted, game.world.width-250, 96);
-		game.debug.text('Result: ' + this.result, game.world.width-250, 128);
 	} else {
 		game.debug.text('', 32, 32); // removes debugging text
 	}
@@ -51,12 +51,15 @@ Quota.prototype.startLevel = function() {
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
-
+	while(this.result.length < this.quota){
+			this.result.push("empty");
+	}
 	this.report = game.add.sprite(0,0,'box');
 	this.report.tint = (128,128,128);
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
-
+	game.debug.text('Result: ' + this.result, game.world.width-550, 128);
+	console.log(this.pickedBoxes)
 	this.status = 'end';
 	this.timer.stop();
 };
@@ -119,5 +122,5 @@ Quota.prototype.updateVetted = function(box) {
 	}else if(box.GOOD == true && box.VETTED == false){
 		this.result.push("grey");
 	}
-
+	this.pickedBoxes.push(box);
 };
