@@ -117,7 +117,8 @@ function outSprite() {
 
 function click (box) {
 	console.log('clicked on ' + this.name);
-	this.tint = 0xff0000;
+	//this.tint = 0xff0000;
+	this.SPEED*=5;
 	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
 	this.inputEnabled = false;
 	this.body.checkCollision.right = false;
@@ -140,7 +141,7 @@ Box.prototype.death = function(){
 Box.prototype.picked = function(){
 	this.SPEED = 0;
 	this.TURN_RATE = 0;
-	//this.x = game.world.width + this.width;
+	// this.x = game.world.width + this.width;
 	this.angle = 0;
 }
 

@@ -31,7 +31,26 @@ Quota.prototype.update = function() {
 		game.debug.text('Quota: ' + this.quota, game.world.width-250, 64);
 		game.debug.text('Vetted: ' + this.vetted, game.world.width-250, 96);
 	} else {
-		game.debug.text('', 32, 32); // removes debugging text
+		for(var i = 1; i <= this.pickedBoxes.length; i++){
+			if(i == 1){
+				if(this.result[i-1] == 'red'){
+					this.pickedBoxes[i-1].tint = 0xff0000;
+				}else if(this.result[i-1] == 'grey'){
+					this.pickedBoxes[i-1].tint = 0x696969;
+				}
+				this.pickedBoxes[i-1].x = game.world.width/2;
+				this.pickedBoxes[i-1].y = this.pickedBoxes[i-1].height*2;
+			}else{
+				if(this.result[i-1] == 'red'){
+					this.pickedBoxes[i-1].tint = 0xff0000;
+				}else if(this.result[i-1] == 'grey'){
+					this.pickedBoxes[i-1].tint = 0x696969;
+				}
+				this.pickedBoxes[i-1].x = game.world.width/2;
+				this.pickedBoxes[i-1].y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
+			}
+			// game.debug.text(this.pickedBoxes[i-1].x + ' ' + this.pickedBoxes[i-1].y, game.world.width/2, 40*i);
+		}
 	}
 
 
@@ -54,12 +73,14 @@ Quota.prototype.endLevel = function() {
 	while(this.result.length < this.quota){
 			this.result.push("empty");
 	}
-/*
+
+	/*
 	this.report = game.add.sprite(0,0,'box');
 	this.report.tint = (128,128,128);
 	this.report.width = game.world.width;
 	this.report.height = game.world.height;
 	*/
+
 	game.debug.text('Result: ' + this.result, game.world.width-550, 128);
 	console.log(this.pickedBoxes);
 
