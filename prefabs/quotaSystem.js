@@ -49,7 +49,8 @@ function mouseWheel(event) {
 		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
 			quotaSystem.pickedBoxes[i-1].y -= 5
 		}
-	} else if (true) {
+	} else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
+		((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
 		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
 			quotaSystem.pickedBoxes[i-1].y += 5
 		}
