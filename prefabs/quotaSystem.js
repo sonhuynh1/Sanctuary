@@ -17,7 +17,9 @@ var Quota = function(game){
 		this.pickedBoxes = [];
     this.vetted = [];
     this.boxArr = {};
-
+		this.redBoxes = 0;
+		this.greyBoxes = 0;
+		this.monthlyGrade = [];
     console.log('end of quota create');
     this.startLevel(this);
     this.status = 'running';
@@ -33,9 +35,17 @@ Quota.prototype.update = function() {
 		game.debug.text('Quota: ' + this.quota, game.world.width-250, 64);
 		game.debug.text('Vetted: ' + this.vetted, game.world.width-250, 96);
 	} else {
-		for(var i = 1; i <= this.pickedBoxes.length; i++){
-			game.debug.text(this.pickedBoxes[i-1].name + ' ' + this.pickedBoxes[i-1].x + ' ' + this.pickedBoxes[i-1].y, game.world.width/2,50*i)
+		this.monthlyGrade[0] = (this.redBoxes - this.greyBoxes) / this.quota;
+		game.debug.text('Quota: ' + this.quota, game.world.width-450, 32);
+		game.debug.text('Total amount of picked squared: ' + this.pickedBoxes.length, game.world.width-450, 64);
+		game.debug.text('Bad squares: ' + this.redBoxes, game.world.width-450, 96);
+		game.debug.text('Neutral squares: ' + this.greyBoxes, game.world.width-450, 128);
+		if(this.monthlyGrade > .75){
+			game.debug.text('Monthly Grade: Failed', game.world.width-450, 160);
+		}else{
+			game.debug.text('Monthly Grade: Pass', game.world.width-450, 160);
 		}
+
 	}
 
 
@@ -74,6 +84,7 @@ Quota.prototype.endLevel = function() {
 	console.log('ending level');
 	while(this.result.length < this.quota){
 			this.result.push("empty");
+			this.redBoxes++;
 	}
 
 	/*
@@ -185,13 +196,16 @@ Quota.prototype.updateVetted = function(box) {
 		if(this.vetted[i] == box.name && box.VETTED == true){
 			box.GOOD = true;
 			this.result.push("grey");
+			this.greyBoxes++;
 			console.log(true);
 		}
 	}
 	if(box.GOOD == false){
 		this.result.push("red");
+		this.redBoxes++;
 	}else if(box.GOOD == true && box.VETTED == false){
 		this.result.push("grey");
+		this.greyBoxes++;
 	}
 	this.pickedBoxes.push(box);
 };
