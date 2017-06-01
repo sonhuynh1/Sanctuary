@@ -72,6 +72,11 @@ Quota.prototype.startLevel = function() {
     // create boxes
     this.createBox(this);
 
+		this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
+		this.gate.tint = 0x000000;
+		this.gate.width = 80;
+		this.gate.height = game.world.height;
+
 		// create a quota goal
 		this.createGoalnTime(this);
 
@@ -122,7 +127,7 @@ Quota.prototype.endLevel = function() {
 			if(this.result[i-1] == 'red'){
 				this.pickedBoxes[i-1].tint = 0xff0000;
 			}else if(this.result[i-1] == 'grey'){
-				this.pickedBoxes[i-1].tint = 0x696969;
+				this.pickedBoxes[i-1].tint = 0x9C9C9C;
 			}
 			x = game.world.width/2;
 			y = this.pickedBoxes[i-1].height*2;
@@ -133,7 +138,7 @@ Quota.prototype.endLevel = function() {
 			if(this.result[i-1] == 'red'){
 				this.pickedBoxes[i-1].tint = 0xff0000;
 			}else if(this.result[i-1] == 'grey'){
-				this.pickedBoxes[i-1].tint = 0x696969;
+				this.pickedBoxes[i-1].tint = 0x9C9C9C;
 			}
 			x = game.world.width/2;
 			y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;

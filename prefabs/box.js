@@ -107,7 +107,7 @@ function newDest(box) {
 }
 
 function overSprite() {
-	this.tint = 0x7a7a7a;
+	this.tint = 0xffffff;
 	hoverData.hovering(this.name);
 }
 
