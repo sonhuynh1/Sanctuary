@@ -11,6 +11,8 @@ var game = new Phaser.Game(800,400,Phaser.AUTO,'');
 game.state.add('boot',bootState);
 game.state.add('load',loadState);
 game.state.add('menu',menuState);
+game.state.add('sound',soundState);
+game.state.add('credits',creditsState);
 game.state.add('play',playState);
 game.state.add('end',endState);
 

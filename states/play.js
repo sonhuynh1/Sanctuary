@@ -1,6 +1,7 @@
 // custom variables for game
-var boxes, hoverData;
+var boxes, hoverData, quotaSystem;
 var lBRW, lBBH, lBLW, lBTH; // left box: right width, bottom height, left width, top height
+var playSong;
 
 // game on
 var playState = {
@@ -14,39 +15,34 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width/2; // left box right width coordinate
+		lBRW = game.world.width/1.5; // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
-
 	},
 	create:function(){
 		console.log('playing');
+
 		// allow for mouse input
 		game.input.mouse.capture = true;
 
 		// set background color
 		this.game.stage.backgroundColor = 0x3D3325;
 
+		playSong = this.game.add.audio('forgottenVale');
+		playSong.play('', 0, 1, true);
+
 		// make boxes and add them into group
 		boxes = game.add.group();
-		boxes.enableBody = true;
-		for(var i = 0; i < 50; i++) {
-			var box = new Box(this.game);
-			//box.name = i;
-			boxes.add(box);
-			this.game.add.existing(box);
-		}
+		boxes.enableBody = true; // sweggmonies
+
+		quotaSystem = new Quota(this.game);
+		game.add.existing(quotaSystem);
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);
 		game.add.existing(hoverData);
 	},
 	update:function(){
-		// if LMB is clicked, then start game
-		if(game.input.activePointer.leftButton.isDown){
-			//game.state.start('end');
-		}
-
 		// check for collision
-		game.physics.arcade.collide(boxes); // collide box group with itself
+		//game.physics.arcade.collide(boxes);// swag monies
 	}
 };
