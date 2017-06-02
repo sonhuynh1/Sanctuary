@@ -17,14 +17,15 @@ var Quota = function(game){
 	this.pickedBoxes = [];
     this.vetted = [];
     this.boxArr = {};
-		this.redBoxes = 0;
-		this.greyBoxes = 0;
-		this.monthlyGrade = [];
-    console.log('end of quota create');
-    this.startLevel(this);
-    this.status = 'running';
 
-		game.input.mouse.mouseWheelCallback = mouseWheel;
+	this.redBoxes = 0;
+	this.greyBoxes = 0;
+	this.monthlyGrade = [];
+    console.log('end of quota create');
+
+	game.input.mouse.mouseWheelCallback = mouseWheel;
+    this.status = 'running';
+    this.startLevel(this);
 };
 Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
@@ -69,16 +70,17 @@ function mouseWheel(event) {
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
+
+	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
+	this.gate.tint = 0x000000;
+	this.gate.width = 80;
+	this.gate.height = game.world.height;
+	
     // create boxes
     this.createBox(this);
 
-		this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
-		this.gate.tint = 0x000000;
-		this.gate.width = 80;
-		this.gate.height = game.world.height;
-
-		// create a quota goal
-		this.createGoalnTime(this);
+	// create a quota goal
+	this.createGoalnTime(this);
 
     //  Start the timer running - this is important!
     this.timer.start();
@@ -88,8 +90,8 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 	while(this.result.length < this.quota){
-			this.result.push("empty");
-			this.redBoxes++;
+		this.result.push("empty");
+		this.redBoxes++;
 	}
 
 	/*
@@ -129,7 +131,7 @@ Quota.prototype.endLevel = function() {
 			}else if(this.result[i-1] == 'grey'){
 				this.pickedBoxes[i-1].tint = 0x9C9C9C;
 			}
-			x = game.world.width/2;
+			x = game.world.width * (4.3/7)+40;
 			y = this.pickedBoxes[i-1].height*2;
 
 			this.pickedBoxes[i-1].x = x;
@@ -140,7 +142,7 @@ Quota.prototype.endLevel = function() {
 			}else if(this.result[i-1] == 'grey'){
 				this.pickedBoxes[i-1].tint = 0x9C9C9C;
 			}
-			x = game.world.width/2;
+			x = game.world.width * (4.3/7)+40;
 			y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
 
 			this.pickedBoxes[i-1].x = x;
@@ -159,17 +161,17 @@ Quota.prototype.createGoalnTime = function() {
 	this.vetted.length = vettedQuantity;
 	console.log("length" + this.vetted.length);
 	while(vettedQuantity >= 0) {
-			var random = game.rnd.between(1,90);
- 			if(this.boxArr[random]){
-					this.vetted[vettedQuantity] = random;
-					var test = this.boxArr[random];
-					console.log(test[0].VETTED);
-					test[0].VETTED = true;
-					console.log(test[0].VETTED);
-					// console.log("random" + random)
-					// console.log("vetted" + this.vetted[vettedQuantity]);
-					vettedQuantity--;
-			}
+		var random = game.rnd.between(1,90);
+			if(this.boxArr[random]){
+			this.vetted[vettedQuantity] = random;
+			var test = this.boxArr[random];
+			console.log(test[0].VETTED);
+			test[0].VETTED = true;
+			console.log(test[0].VETTED);
+			// console.log("random" + random)
+			// console.log("vetted" + this.vetted[vettedQuantity]);
+			vettedQuantity--;
+		}
 	}
 	console.log(this.vetted);
 	console.log(this.vetted[1]);
