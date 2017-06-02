@@ -49,6 +49,7 @@ var Box = function(game){
 	this.VETTED = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
+	this.disappearDistance = game.world.width * (4.3/7)-this.width*1.5;
 };
 
 Box.prototype = Object.create(Phaser.Sprite.prototype);
@@ -94,7 +95,7 @@ Box.prototype.update = function(){
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 
-	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from
+	if (this.body.x >= this.disappearDistance){ // if the sprite is over 800.x width, remove from
         //boxes.remove(this);
        	this.picked(this);
     }
@@ -141,9 +142,9 @@ Box.prototype.death = function(){
 Box.prototype.picked = function(){
 	this.SPEED = 0;
 	this.TURN_RATE = 0;
-	// this.x = game.world.width + this.width;
+	// this.x = -this.width;
 	this.angle = 0;
-}
+};
 
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){

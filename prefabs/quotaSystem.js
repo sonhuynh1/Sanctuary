@@ -75,7 +75,7 @@ Quota.prototype.startLevel = function() {
 	this.gate.tint = 0x000000;
 	this.gate.width = 80;
 	this.gate.height = game.world.height;
-	
+
     // create boxes
     this.createBox(this);
 
