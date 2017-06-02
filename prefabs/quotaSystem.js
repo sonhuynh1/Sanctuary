@@ -85,7 +85,7 @@ function reset() {
 		}
 
 	    this.quota = 0;
-		this.level = 1;
+		this.level++;
 		this.result = []; // grey, red, empty
 		this.pickedBoxes = [];
 		this.vetted = [];
@@ -94,7 +94,7 @@ function reset() {
 		this.redBoxes = 0;
 		this.greyBoxes = 0;
 		this.monthlyGrade = [];
-		
+
 		this.timer.loop(5000, this.endLevel, this);
 	    this.status = 'running';
 	    this.startLevel(this);
