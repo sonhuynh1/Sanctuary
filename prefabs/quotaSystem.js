@@ -124,6 +124,7 @@ Quota.prototype.endLevel = function() {
 	for(var i = 1; i <= this.pickedBoxes.length; i++){
 		var x;
 		var y;
+		this.pickedBoxes[i-1].alpha = 1;
 
 		if(i == 1){
 			if(this.result[i-1] == 'red'){
