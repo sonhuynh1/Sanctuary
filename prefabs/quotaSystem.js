@@ -8,7 +8,7 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(5000, this.endLevel, this);
+    this.timer.loop(15000, this.endLevel, this);
 
     // custom variables for construct
     this.quota = 0;
@@ -68,12 +68,12 @@ function mouseWheel(event) {
 	if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
 		((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
 		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-			quotaSystem.pickedBoxes[i-1].y -= 5
+			quotaSystem.pickedBoxes[i-1].y -= 15
 		}
 	} else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
 		((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
 		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-			quotaSystem.pickedBoxes[i-1].y += 5
+			quotaSystem.pickedBoxes[i-1].y += 15
 		}
 	}
 }
