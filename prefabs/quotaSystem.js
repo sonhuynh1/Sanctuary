@@ -8,7 +8,7 @@ var Quota = function(game){
     this.timer = game.time.create(false);
 
     //  Set a TimerEvent to occur after 2 seconds
-    this.timer.loop(15000, this.endLevel, this);
+    this.timer.loop(5000, this.endLevel, this);
 
     // custom variables for construct
     this.quota = 0;
@@ -21,9 +21,14 @@ var Quota = function(game){
 	this.redBoxes = 0;
 	this.greyBoxes = 0;
 	this.monthlyGrade = [];
-    console.log('end of quota create');
+
+	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
+	this.gate.tint = 0x000000;
+	this.gate.width = 80;
+	this.gate.height = game.world.height;
 
 	game.input.mouse.mouseWheelCallback = mouseWheel;
+	game.input.onDown.add(reset, this);
     this.status = 'running';
     this.startLevel(this);
 };
@@ -46,7 +51,12 @@ Quota.prototype.update = function() {
 		}else{
 			game.debug.text('Monthly Grade: Pass', game.world.width-450, 160);
 		}
-
+		// if(game.input.onDown) {
+		// 	console.log('click');
+		// 	// for(var i = 0; i < this.pickedBoxes.length; i++){
+		// 	// 	this.pickedBoxes[i].death(this.pickedBoxes[i]);
+		// 	// }
+		// }
 	}
 
 
@@ -67,14 +77,20 @@ function mouseWheel(event) {
 		}
 	}
 }
+function reset() {
+	console.log('click');
+	if(this.status == 'end') {
+		for(var i = 0; i < this.pickedBoxes.length; i++){
+			this.pickedBoxes[i].death(this.pickedBoxes[i]);
+		}
+		this.timer.loop(5000, this.endLevel, this);
+	    this.status = 'running';
+	    this.startLevel(this);
+	}
+}
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
-
-	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
-	this.gate.tint = 0x000000;
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
 
     // create boxes
     this.createBox(this);
