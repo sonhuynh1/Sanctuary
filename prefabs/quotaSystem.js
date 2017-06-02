@@ -83,6 +83,18 @@ function reset() {
 		for(var i = 0; i < this.pickedBoxes.length; i++){
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
+
+	    this.quota = 0;
+		this.level = 1;
+		this.result = []; // grey, red, empty
+		this.pickedBoxes = [];
+		this.vetted = [];
+		this.boxArr = {};
+
+		this.redBoxes = 0;
+		this.greyBoxes = 0;
+		this.monthlyGrade = [];
+		
 		this.timer.loop(5000, this.endLevel, this);
 	    this.status = 'running';
 	    this.startLevel(this);
