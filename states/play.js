@@ -25,9 +25,12 @@ var playState = {
 		game.input.mouse.capture = true;
 
 		// set background color
-		this.game.stage.backgroundColor = 0x8C7B6C;
+		//this.game.stage.backgroundColor = 0x8C7B6C;
+		var background2 = game.add.sprite(0, 0, 'playBackground');// background for title state
+    	background2.height = game.height;
+    	background2.width = game.width;
 
-		playSong = this.game.add.audio('forgottenVale');
+		playSong = this.game.add.audio('jeux');
 		playSong.play('', 0, 1, true);
 
 		// make boxes and add them into group

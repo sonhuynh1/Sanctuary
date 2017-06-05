@@ -11,11 +11,15 @@ var box;
 var menuState = {
 	preload:function(){
 		// menu text(s)
-		//var menuBackground = game.add.tileSprite(0, 0, 800, 400, 'background');// background for title state
+		var background = game.add.sprite(0, 0, 'background');// background for title state
+    	background.height = game.height;
+    	background.width = game.width;
+		
 		// title for game
-		this.game.stage.backgroundColor = 0x3D3325;
-		var instruction = game.add.text(game.world.centerX -110, game.world.centerY-200, 'Sanctuary',
-			{font:"30pt Courier",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
+		var title = game.add.sprite(game.world.centerX -300, game.world.centerY -400, 'logo');
+		//this.game.stage.backgroundColor = 0x3D3325;
+		//var instruction = game.add.text(game.world.centerX -110, game.world.centerY-200, 'Sanctuary',
+		//	{font:"30pt Courier",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
 	},
 
 	create:function(){
@@ -28,13 +32,13 @@ var menuState = {
 		menuSong.play('', 0, 0.5, true);
 
 		//animation for square on screen
-		for (var i = 0; i < 20; i++) {
+		for (var i = 0; i < 30; i++) {
 		box = new menuBox(game);
 		game.add.existing(box);// adding to Phaser display list
 		}
 
 		//if "Play Game" button is pressed
-		this.createButton(game, "Play Game", game.world.centerX -230, game.world.centerY -70, 220, 100, 
+		this.createButton(game, "Play Game", game.world.centerX -270, game.world.centerY -70, 240, 100, 
 			function(){
 
 				menuSong.stop();
@@ -61,28 +65,19 @@ var menuState = {
 				fadeScreen.loop(Phaser.Timer.SECOND *6, this.blackScreen, this);
 				fadeScreen.start();
 
-				//frantic, this animation on screen for square
-				//game fades to black and a quote from someone fades in
-				//timer stops and play state is called
-
 			});
 
 		//if "Sound" button is pressed
-		this.createButton(game, "Sound", game.world.centerX, game.world.centerY -70, 220, 100, 
+		this.createButton(game, "Sound", game.world.centerX, game.world.centerY -70, 240, 100, 
 			function(){
 				this.game.state.start('sound')
 			});
 
 		//if "Credits" button is pressed
-		this.createButton(game, "Credits", game.world.centerX +230, game.world.centerY -70, 220, 100, 
+		this.createButton(game, "Credits", game.world.centerX +270, game.world.centerY -70, 240, 100, 
 			function(){
 				this.game.state.start('credits')
 			});
-
-		//for (var i = 0; i < 50; i++) {
-		//box = new menuBox(game, 'box', 1, 1);
-		//this.game.add.existing(box);// adding to Phaser display list
-		//}
 	},
 
 	update:function(){
@@ -112,20 +107,22 @@ var menuState = {
 	},
 
 	blackScreen:function(){
-		var quote = game.add.text(game.world.centerX - 50, game.world.centerY - 100, 'Quote',
-			{font:"30pt Courier",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
+		var quote = game.add.text(game.world.centerX - 400, game.world.centerY - 100, 'Recognize yourself in he\nand she who are not\nlike you and me. ― Carlos Fuentes',
+			{font:"30pt",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
+		quote.font = 'Days One';
 		ding3.play('', 0, 1, false);
 		this.time.events.remove(this.fadeScreen);
 	},
 
 	createButton:function(game, string, x, y, w, h, callback){
-		var button = game.add.button(x, y, 'buttons', callback, this)
+		var button = game.add.button(x, y, 'buttons', callback, this, 2, 1, 0)
 		button.anchor.setTo(0.5, 0.5);
 		button.width = w;
 		button.height = h;
 
 		var txt = game.add.text(button.x, button.y, string,
-		{font:"30pt Courier",fill:"#19cb65", align:"center"});
+			{font:"30pt",fill:"#19cb65", align:"center"});
+		txt.font = 'Days One';
 		txt.anchor.setTo(0.5, 0.5);
 	},
 };
