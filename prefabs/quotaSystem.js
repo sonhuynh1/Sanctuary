@@ -29,13 +29,17 @@ var Quota = function(game){
 	this.greyBoxes = 0;
 	this.monthlyGrade = [];
 
+	// creates the sprite for gate
 	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
 	this.gate.tint = 0x000000;
 	this.gate.width = 80;
 	this.gate.height = game.world.height;
 
+	// add custom inputs for mouse
 	game.input.mouse.mouseWheelCallback = mouseWheel;
 	game.input.onDown.add(reset, this);
+
+	// set up quotaSystem to start game
     this.status = 'running';
     this.startLevel(this);
 };
@@ -61,7 +65,9 @@ Quota.prototype.update = function() {
 	}
 
 	// end game if all boxes are selected
-	if(this.boxCount == this.pickedBoxes.length);
+	if(this.boxCount == this.pickedBoxes.length){
+		this.endLevel(this);
+	}
 };
 
 // function to scroll the list of boxes at the end of a level
@@ -187,7 +193,8 @@ Quota.prototype.createGoalnTime = function() {
 
 	// set quota and length of vetted array
 	this.quota = this.level;
-	this.vetted.length = this.vettedCount;
+	var vettedQuantity = this.vettedCount;
+	this.vetted.length = vettedQuantity;
 
 	// go through the list to pick a list of vetted
 	while(vettedQuantity >= 0) {

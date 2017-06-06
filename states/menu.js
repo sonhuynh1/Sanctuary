@@ -48,11 +48,11 @@ var menuState = {
 				talking.onDecoded.add(this.songIn, this);
 				
 				timer = this.game.time.create(false);
-				timer.add(Phaser.Timer.SECOND *14 , this.afterIntro, this);
+				timer.add(Phaser.Timer.SECOND *1 , this.afterIntro, this);
 				timer.start();
 
 				timer2 = this.game.time.create(false);
-				timer2.loop(Phaser.Timer.SECOND *5 , this.endTalk, this);
+				timer2.loop(Phaser.Timer.SECOND *1 , this.endTalk, this);
 				timer2.start();
 
 				ding3 = this.game.add.audio('ding3');
