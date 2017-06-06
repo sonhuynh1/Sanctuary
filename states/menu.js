@@ -17,7 +17,6 @@ var menuState = {
 		console.log('menu');
 		// allow for mouse input
 		//menuSong.onDecoded.add(this.songOut, this);
-
 		timer = this.game.time.create(false);
 		timer.add(Phaser.Timer.SECOND *10 , this.afterIntro, this);
 		timer.start();
@@ -34,7 +33,6 @@ var menuState = {
 		this.game.add.tween(fade).to( { alpha: 1 }, 3000, "Linear", true);
 		fadeScreen.loop(Phaser.Timer.SECOND *6, this.blackScreen, this);
 		fadeScreen.start();
-
 	},
 
 	update:function(){
