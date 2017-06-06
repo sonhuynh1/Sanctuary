@@ -18,11 +18,11 @@ var menuState = {
 		// allow for mouse input
 		//menuSong.onDecoded.add(this.songOut, this);
 		timer = this.game.time.create(false);
-		timer.add(Phaser.Timer.SECOND *10 , this.afterIntro, this);
+		timer.add(Phaser.Timer.SECOND *1 , this.afterIntro, this);
 		timer.start();
 
 		timer2 = this.game.time.create(false);
-		timer2.loop(Phaser.Timer.SECOND *5 , this.endTalk, this);
+		timer2.loop(Phaser.Timer.SECOND *1 , this.endTalk, this);
 		timer2.start();
 
 		fadeScreen = this.game.time.create(false);

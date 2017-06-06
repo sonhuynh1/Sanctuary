@@ -192,27 +192,27 @@ Quota.prototype.createGoalnTime = function() {
 	// set quota and length of vetted array
 	this.quota = this.level;
 	var vettedQuantity = this.vettedCount;
-	this.vetted.length = vettedQuantity;
+
+	// for loop to keep track of boxArr keys
+	var keys = [];
+	for(var key in this.boxArr){
+		keys.push(key);
+	}
+	console.log("keys " + keys);
 
 	// go through the list to pick a list of vetted
-	while(vettedQuantity >= 0) {
-		var random = game.rnd.between(1,90);
+	while(vettedQuantity > 0) {
+		var key = keys[game.rnd.between(0,keys.length)];
 
 		// if the random number is a box in boxArr
-		if(this.boxArr[random]){
-			var arr = this.boxArr[random];
-			console.log("arr " + arr[0].id);
-			// var random1 = game.rnd.between(0, arr.length-1);
-			// console.log("random1 "  + random1);
-			this.vetted[vettedQuantity] = arr[0].id;
-			arr[0].VETTED = true;
-			arr.splice(0,1);
-
-			if(arr.length == 0){
-				delete this.boxArr[random];
+		if(this.boxArr[key]){
+			var arr = this.boxArr[key];
+			var random1 = game.rnd.between(0, arr.length-1);
+			if(!arr[random1].VETTED){
+				this.vetted.push(arr[random1].id);
+				arr[random1].VETTED = true;
+				vettedQuantity--;
 			}
-
-			vettedQuantity--;
 		}
 	}
 	console.log(this.vetted);
@@ -222,6 +222,7 @@ Quota.prototype.createBox = function() {
 	for(var i = 0; i < this.boxCount; i++) {
 		var box = new Box(this.game);
 		console.log(box.id);
+		console.log(box.name);
 		var ran = game.rnd.between(0,3);
 		if(ran == 0){
 			box.GOOD = true;
