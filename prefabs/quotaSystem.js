@@ -194,14 +194,14 @@ Quota.prototype.createGoalnTime = function() {
 	while(vettedQuantity >= 0) {
 		var random = game.rnd.between(1,90);
 			if(this.boxArr[random]){
-			this.vetted[vettedQuantity] = random;
-			var test = this.boxArr[random];
-			console.log(test[0].VETTED);
-			test[0].VETTED = true;
-			console.log(test[0].VETTED);
-			// console.log("random" + random)
-			// console.log("vetted" + this.vetted[vettedQuantity]);
-			vettedQuantity--;
+				var arr = this.boxArr[random];
+				var random1 = game.rnd.between(0, arr.length-1);
+				this.vetted[vettedQuantity] = arr[random1];
+				arr[random1].VETTED = true;
+
+				// console.log("random" + random)
+				// console.log("vetted" + this.vetted[vettedQuantity]);
+				vettedQuantity--;
 		}
 	}
 	console.log(this.vetted);
@@ -212,6 +212,7 @@ Quota.prototype.createBox = function() {
 	// make boxes and add them into group
 	for(var i = 0; i < 25; i++) {
 		var box = new Box(this.game);
+		console.log(box.id);
 		var ran = game.rnd.between(0,3);
 		if(ran == 0){
 			box.GOOD = true;
