@@ -13,6 +13,8 @@ var Quota = function(game){
     // custom variables for construct
     this.quota = 0;
     this.level = 1;
+    this.boxes = 5;
+
     this.result = []; // grey, red, empty
 	this.pickedBoxes = [];
     this.vetted = [];
@@ -51,15 +53,7 @@ Quota.prototype.update = function() {
 		}else{
 			game.debug.text('Monthly Grade: Pass', game.world.width-450, 160);
 		}
-		// if(game.input.onDown) {
-		// 	console.log('click');
-		// 	// for(var i = 0; i < this.pickedBoxes.length; i++){
-		// 	// 	this.pickedBoxes[i].death(this.pickedBoxes[i]);
-		// 	// }
-		// }
 	}
-
-
 };
 
 function mouseWheel(event) {
@@ -197,18 +191,17 @@ Quota.prototype.createGoalnTime = function() {
 			console.log(test[0].VETTED);
 			test[0].VETTED = true;
 			console.log(test[0].VETTED);
-			// console.log("random" + random)
+			// console.log("random" + random);
 			// console.log("vetted" + this.vetted[vettedQuantity]);
 			vettedQuantity--;
 		}
 	}
 	console.log(this.vetted);
 	console.log(this.vetted[1]);
-
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
-	for(var i = 0; i < 25; i++) {
+	for(var i = 0; i < this.boxes; i++) {
 		var box = new Box(this.game);
 		var ran = game.rnd.between(0,3);
 		if(ran == 0){

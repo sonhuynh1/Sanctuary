@@ -35,7 +35,7 @@ var playState = {
 
 		// make boxes and add them into group
 		boxes = game.add.group();
-		boxes.enableBody = true; // sweggmonies
+		boxes.enableBody = true;
 
 		quotaSystem = new Quota(this.game);
 		game.add.existing(quotaSystem);
