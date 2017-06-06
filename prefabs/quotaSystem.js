@@ -14,7 +14,7 @@ var Quota = function(game){
     this.quota = 0;
     this.level = 1;
     this.result = []; // grey, red, empty
-	this.pickedBoxes = [];
+		this.pickedBoxes = [];
     this.vetted = [];
     this.boxArr = {};
 
@@ -22,10 +22,7 @@ var Quota = function(game){
 	this.greyBoxes = 0;
 	this.monthlyGrade = [];
 
-	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
-	this.gate.tint = 0x000000;
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
+
 
 	game.input.mouse.mouseWheelCallback = mouseWheel;
 	game.input.onDown.add(reset, this);
@@ -112,6 +109,11 @@ Quota.prototype.startLevel = function() {
 
     //  Start the timer running - this is important!
     this.timer.start();
+
+		this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
+		//this.gate.tint = 0x000000;
+		this.gate.width = 80;
+		this.gate.height = game.world.height;
 
     //this.endLevel(this);
 };
