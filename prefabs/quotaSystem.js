@@ -19,8 +19,8 @@ var Quota = function(game){
 	this.pickedBoxes = [];
 
 	// the array of guaranteed safe boxes
-    this.vetted = [];
     this.vettedCount = 5;
+    this.vetted = [];
 
     this.result = []; // grey, red, empty
 
@@ -59,7 +59,7 @@ Quota.prototype.update = function(){
 	}
 
 	// end game if all boxes are selected
-	if(this.boxCount == this.pickedBoxes.length){
+	if(this.boxCount == this.pickedBoxes.length && this.status != 'end'){
 		this.endLevel(this);
 	}
 };
@@ -201,13 +201,21 @@ Quota.prototype.createGoalnTime = function() {
 		// if the random number is a box in boxArr
 		if(this.boxArr[random]){
 			var arr = this.boxArr[random];
-			var random1 = game.rnd.between(0, arr.length-1);
-			this.vetted[vettedQuantity] = arr[random1];
-			arr[random1].VETTED = true;
+			console.log("arr " + arr[0].id);
+			// var random1 = game.rnd.between(0, arr.length-1);
+			// console.log("random1 "  + random1);
+			this.vetted[vettedQuantity] = arr[0].id;
+			arr[0].VETTED = true;
+			arr.splice(0,1);
+
+			if(arr.length == 0){
+				delete this.boxArr[random];
+			}
 
 			vettedQuantity--;
 		}
 	}
+	console.log(this.vetted);
 };
 Quota.prototype.createBox = function() {
 	// make boxes and add them into group
