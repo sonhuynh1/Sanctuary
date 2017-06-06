@@ -21,11 +21,7 @@ menuBox.prototype = Object.create(Phaser.Sprite.prototype);// explicitly specify
 menuBox.prototype.constructor = menuBox;// explicitly specifying the prefab’s constructor
 menuBox.prototype.update = function() {
 
-    //wraping the armada
-    if (this.body.x >= 800){ // if the sprite is over 800.x width
+    if (this.body.x >= 2000){ // if the sprite is over 800.x width
         this.body.x = 0; // go back to 0.x position
-    }
-    if (this.body.x < 0){ // if the sprite is under 0.x width
-        this.body.x = 800; // start at 800.x width
     }
 }

@@ -26,13 +26,13 @@ var playState = {
 
 		// set background color
 		this.game.stage.backgroundColor = 0x8C7B6C;
-
-		playSong = this.game.add.audio('forgottenVale');
-		playSong.play('', 0, 1, true);
+		// var background2 = game.add.sprite(0, 0, 'playBackground');// background for title state
+    // 	background2.height = game.height;
+    // 	background2.width = game.width;
 
 		// make boxes and add them into group
 		boxes = game.add.group();
-		boxes.enableBody = true; // sweggmonies
+		boxes.enableBody = true;
 
 		quotaSystem = new Quota(this.game);
 		game.add.existing(quotaSystem);
@@ -40,6 +40,8 @@ var playState = {
 		// Create hoverData
 		hoverData = new HoverData(this.game);
 		game.add.existing(hoverData);
+
+		//var gate = game.add.sprite(0, 0, 'gate')
 
 	},
 	update:function(){

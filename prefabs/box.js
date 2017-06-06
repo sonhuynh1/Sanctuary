@@ -14,6 +14,9 @@ var Box = function(game){
 	var real = game.rnd.realInRange(0.5,1.5);
 	this.scale.setTo(real,real);
 
+	//Identification number
+	this.id = makeid();
+
 	//looks at the real variable and determines a appropiate random age
 	//based on the scale, or the random "real" value
 	if (real <= 0.6 && real >= 0.5) {
@@ -49,6 +52,7 @@ var Box = function(game){
 	this.VETTED = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
+	this.disappearDistance = game.world.width * (4.3/7)-this.width*1.5;
 };
 
 Box.prototype = Object.create(Phaser.Sprite.prototype);
@@ -94,11 +98,22 @@ Box.prototype.update = function(){
 	this.body.velocity.x = Math.cos(this.rotation) * this.SPEED;
 	this.body.velocity.y = Math.sin(this.rotation) * this.SPEED;
 
-	if (this.body.x >= 800){ // if the sprite is over 800.x width, remove from
+	if (this.body.x >= this.disappearDistance){ // if the sprite is over 800.x width, remove from
         //boxes.remove(this);
        	this.picked(this);
     }
 };
+
+//Creates an ID and returns it
+function makeid(){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 
 // called when objects collide with wall
 function newDest(box) {
@@ -108,7 +123,7 @@ function newDest(box) {
 
 function overSprite() {
 	this.tint = 0xffffff;
-	hoverData.hovering(this.name);
+	hoverData.hovering(this.name, this.id);
 }
 
 function outSprite() {
@@ -141,9 +156,10 @@ Box.prototype.death = function(){
 Box.prototype.picked = function(){
 	this.SPEED = 0;
 	this.TURN_RATE = 0;
-	// this.x = game.world.width + this.width;
+	// this.x = -this.width;
+	this.alpha = 0.5;
 	this.angle = 0;
-}
+};
 
 // animation of box when trying to enter gate
 Box.prototype.enterGate = function(box,gate,bool){
