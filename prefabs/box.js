@@ -14,6 +14,9 @@ var Box = function(game){
 	var real = game.rnd.realInRange(0.5,1.5);
 	this.scale.setTo(real,real);
 
+	//Identification number
+	this.id = makeid();
+
 	//looks at the real variable and determines a appropiate random age
 	//based on the scale, or the random "real" value
 	if (real <= 0.6 && real >= 0.5) {
@@ -101,6 +104,17 @@ Box.prototype.update = function(){
     }
 };
 
+//Creates an ID and returns it
+function makeid(){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
 // called when objects collide with wall
 function newDest(box) {
 	if (!box.inputEnabled) {console.log('newDest');}
@@ -109,7 +123,7 @@ function newDest(box) {
 
 function overSprite() {
 	this.tint = 0xffffff;
-	hoverData.hovering(this.name);
+	hoverData.hovering(this.name, this.id);
 }
 
 function outSprite() {

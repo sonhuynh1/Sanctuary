@@ -8,12 +8,13 @@ WebFontConfig = {
 
     //  The Google Fonts we want to load (specify as many as you like in the array)
     google: {
-      families: ['Days One', 'Maximus BT'],
+      families: ['Black Ops One']
     }
 
 };
 
 // load in assets and call menu state
+var talking;
 var loadState = {
 
 	preload:function(){
@@ -23,8 +24,9 @@ var loadState = {
 		this.game.load.image('box','assets/imgs/box.jpg');
 		this.game.load.image('black','assets/imgs/Black.png');
 		this.game.load.image('background','assets/imgs/Sanctuary_Dirt.png');
-		this.game.load.image('playBackground','assets/imgs/Sanctuary_Background.png');
+		//this.game.load.image('playBackground','assets/imgs/Sanctuary_Background.png');
 		this.game.load.image('logo','assets/imgs/Sanctuary_Logo.png');
+    this.game.load.image('gate','assets/imgs/Sanctuary_Gate.png');
 		this.game.load.spritesheet('buttons','assets/imgs/buttons.png', 256, 64);
 		this.game.load.audio('crowdWhiteNoiseLooped','assets/sound/soundfx/CrowdWhiteNoiseLooped.mp3');
 		this.game.load.audio('ding3','assets/sound/soundfx/Ding 3.mp3');
@@ -32,8 +34,8 @@ var loadState = {
 		this.game.load.audio('jeux','assets/sound/tracks/Jeux D Enfants.m4a');
 
 		//  Load the Google WebFont Loader script
-    	this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
-		
+    this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
 		/*Sounds*/
 		//this.game.load.audio('ding','assets/sound/soundfx/Ding.mp3');
 		//this.game.load.audio('ding2','assets/sound/soundfx/Ding 2.mp3');
@@ -53,10 +55,11 @@ var loadState = {
 		//this.game.load.audio('thud2','assets/sound/soundfx/Thud 2.mp3');
 		//this.game.load.audio('thud3','assets/sound/soundfx/Thud 3.mp3');
 	},
-	
+
 	create:function(){
 		console.log('loading');
-
+    talking = this.game.add.audio('crowdWhiteNoiseLooped');
+    talking.play();
 		// call menu state
 		game.state.start('menu');
 	}

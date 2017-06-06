@@ -29,12 +29,6 @@ var Quota = function(game){
 	this.greyBoxes = 0;
 	this.monthlyGrade = [];
 
-	// creates the sprite for gate
-	this.gate = game.add.sprite(game.world.width * (4.3/7),0,'box');
-	this.gate.tint = 0x000000;
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
-
 	// add custom inputs for mouse
 	game.input.mouse.mouseWheelCallback = mouseWheel;
 	game.input.onDown.add(reset, this);
@@ -45,7 +39,7 @@ var Quota = function(game){
 };
 Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
-Quota.prototype.update = function() {
+Quota.prototype.update = function(){
 	// debugging text to show timer and quota
 	if(this.status != 'end'){
 		game.debug.text('Time until event: ' + Math.ceil(this.timer.duration.toFixed(0)/1000), game.world.width-250, 32);
@@ -125,6 +119,10 @@ Quota.prototype.startLevel = function() {
 		this.timer.loop(1000 * this.quota, this.endLevel, this);
 		this.timer.start();
 	}
+
+	this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
+	this.gate.width = 80;
+	this.gate.height = game.world.height;
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
@@ -202,9 +200,11 @@ Quota.prototype.createGoalnTime = function() {
 
 		// if the random number is a box in boxArr
 		if(this.boxArr[random]){
-			this.vetted[vettedQuantity] = random;
-			var test = this.boxArr[random];
-			test[0].VETTED = true;
+			var arr = this.boxArr[random];
+			var random1 = game.rnd.between(0, arr.length-1);
+			this.vetted[vettedQuantity] = arr[random1];
+			arr[random1].VETTED = true;
+
 			vettedQuantity--;
 		}
 	}
@@ -213,6 +213,7 @@ Quota.prototype.createBox = function() {
 	// make boxes and add them into group
 	for(var i = 0; i < this.boxCount; i++) {
 		var box = new Box(this.game);
+		console.log(box.id);
 		var ran = game.rnd.between(0,3);
 		if(ran == 0){
 			box.GOOD = true;

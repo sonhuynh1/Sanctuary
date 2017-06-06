@@ -10,74 +10,29 @@ var box;
 
 var menuState = {
 	preload:function(){
-		// menu text(s)
-		var background = game.add.sprite(0, 0, 'background');// background for title state
-    	background.height = game.height;
-    	background.width = game.width;
-		
-		// title for game
-		var title = game.add.sprite(game.world.centerX -300, game.world.centerY -400, 'logo');
-		//this.game.stage.backgroundColor = 0x3D3325;
-		//var instruction = game.add.text(game.world.centerX -110, game.world.centerY-200, 'Sanctuary',
-		//	{font:"30pt Courier",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
+
 	},
 
 	create:function(){
 		console.log('menu');
 		// allow for mouse input
-		this.game.input.mouse.capture = true;
+		//menuSong.onDecoded.add(this.songOut, this);
+		timer = this.game.time.create(false);
+		timer.add(Phaser.Timer.SECOND *10 , this.afterIntro, this);
+		timer.start();
 
-		//add song
-		menuSong = this.game.add.audio('gymnopedie');
-		menuSong.play('', 0, 0.5, true);
+		timer2 = this.game.time.create(false);
+		timer2.loop(Phaser.Timer.SECOND *5 , this.endTalk, this);
+		timer2.start();
 
-		//animation for square on screen
-		for (var i = 0; i < 30; i++) {
-		box = new menuBox(game);
-		game.add.existing(box);// adding to Phaser display list
-		}
-
-		//if "Play Game" button is pressed
-		this.createButton(game, "Play Game", game.world.centerX -270, game.world.centerY -70, 240, 100, 
-			function(){
-
-				menuSong.stop();
-				//menuSong.onDecoded.add(this.songOut, this);
-
-				talking = this.game.add.audio('crowdWhiteNoiseLooped');
-				talking.onDecoded.add(this.songIn, this);
-				
-				timer = this.game.time.create(false);
-				timer.add(Phaser.Timer.SECOND *1 , this.afterIntro, this);
-				timer.start();
-
-				timer2 = this.game.time.create(false);
-				timer2.loop(Phaser.Timer.SECOND *1 , this.endTalk, this);
-				timer2.start();
-
-				ding3 = this.game.add.audio('ding3');
-				fadeScreen = this.game.time.create(false);
-				var fade = game.add.sprite(0, 0, 'black');
-				fade.anchor.setTo(0.5, 0.5);
-				fade.alpha = 0;
-				fade.scale.setTo(10, 10);
-				this.game.add.tween(fade).to( { alpha: 1 }, 3000, "Linear", true);
-				fadeScreen.loop(Phaser.Timer.SECOND *6, this.blackScreen, this);
-				fadeScreen.start();
-
-			});
-
-		//if "Sound" button is pressed
-		this.createButton(game, "Sound", game.world.centerX, game.world.centerY -70, 240, 100, 
-			function(){
-				this.game.state.start('sound')
-			});
-
-		//if "Credits" button is pressed
-		this.createButton(game, "Credits", game.world.centerX +270, game.world.centerY -70, 240, 100, 
-			function(){
-				this.game.state.start('credits')
-			});
+		fadeScreen = this.game.time.create(false);
+		var fade = game.add.sprite(0, 0, 'black');
+		fade.anchor.setTo(0.5, 0.5);
+		fade.alpha = 0;
+		fade.scale.setTo(10, 10);
+		this.game.add.tween(fade).to( { alpha: 1 }, 3000, "Linear", true);
+		fadeScreen.loop(Phaser.Timer.SECOND *6, this.blackScreen, this);
+		fadeScreen.start();
 	},
 
 	update:function(){
@@ -103,26 +58,13 @@ var menuState = {
 
 	endTalk:function(){
 		this.time.events.remove(this.timer2);
-		talking.fadeOut(4000);
 	},
 
 	blackScreen:function(){
-		var quote = game.add.text(game.world.centerX - 400, game.world.centerY - 100, 'Recognize yourself in he\nand she who are not\nlike you and me. ― Carlos Fuentes',
+		var quote = game.add.text(game.world.centerX-450, game.world.centerY-100, '\"People are blind to reality and\nonly see what they want to see\"-Anonymous',
 			{font:"30pt",fill:"#19cb65",stroke:"#000000",strokeThickness:6});
-		quote.font = 'Days One';
-		ding3.play('', 0, 1, false);
+		quote.font = 'Black Ops One';
 		this.time.events.remove(this.fadeScreen);
 	},
 
-	createButton:function(game, string, x, y, w, h, callback){
-		var button = game.add.button(x, y, 'buttons', callback, this, 2, 1, 0)
-		button.anchor.setTo(0.5, 0.5);
-		button.width = w;
-		button.height = h;
-
-		var txt = game.add.text(button.x, button.y, string,
-			{font:"30pt",fill:"#19cb65", align:"center"});
-		txt.font = 'Days One';
-		txt.anchor.setTo(0.5, 0.5);
-	},
 };
