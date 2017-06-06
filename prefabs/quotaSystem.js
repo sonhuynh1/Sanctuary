@@ -23,6 +23,9 @@ var Quota = function(game){
     this.vetted = [];
 
     this.result = []; // grey, red, empty
+    this.scaleBy = 0;
+    this.scaleResultIncrement = [0,0,0,0];
+    this.scaledResult = [0,0,0,0]; // grey, red, empty, quota
 
     // tracker variables for end report
 	this.redBoxes = 0;
@@ -51,6 +54,23 @@ Quota.prototype.update = function(){
 		game.debug.text('Total amount of picked squared: ' + this.pickedBoxes.length, game.world.width-450, 64);
 		game.debug.text('Bad squares: ' + this.redBoxes, game.world.width-450, 96);
 		game.debug.text('Neutral squares: ' + this.greyBoxes, game.world.width-450, 128);
+
+		// show the results for debugging
+
+		game.debug.text('Result: ' + this.result, game.world.width-450, game.world.height - 100);
+		
+		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
+			this.scaleResultIncrement[0] += Math.ceil(this.game.rnd.frac()*this.scaledResult[0]/100);
+		} else if(this.scaleResultIncrement[1] < this.scaledResult[1]){
+			this.scaleResultIncrement[1] += Math.ceil(this.game.rnd.frac()*this.scaledResult[1]/100);
+		} else if(this.scaleResultIncrement[2] < this.scaledResult[2]){
+			this.scaleResultIncrement[2] += Math.ceil(this.game.rnd.frac()*this.scaledResult[2]/100);
+		} else if(this.scaleResultIncrement[3] < this.scaledResult[3]){
+			this.scaleResultIncrement[3] += Math.ceil(this.game.rnd.frac()*this.scaledResult[3]/100);
+		}
+
+		game.debug.text('Result: ' + this.scaleResultIncrement, game.world.width-450, game.world.height - 50);
+
 		if(this.monthlyGrade > .75){
 			game.debug.text('Monthly Grade: Failed', game.world.width-450, 160);
 		}else{
@@ -66,18 +86,20 @@ Quota.prototype.update = function(){
 
 // function to scroll the list of boxes at the end of a level
 function mouseWheel(event) {
-	// scroll down
-	if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
-		((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
-		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-			quotaSystem.pickedBoxes[i-1].y -= 15
+	if(quotaSystem.status == 'end'){
+		// scroll down
+		if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
+			((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
+			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
+				quotaSystem.pickedBoxes[i-1].y -= 15
+			}
 		}
-	}
-	// scroll up
-	else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
-		((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
-		for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-			quotaSystem.pickedBoxes[i-1].y += 15
+		// scroll up
+		else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
+			((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
+			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
+				quotaSystem.pickedBoxes[i-1].y += 15
+			}
 		}
 	}
 }
@@ -95,6 +117,8 @@ function reset() {
 		this.pickedBoxes = [];
 		this.vetted = [];
 		this.boxArr = {};
+		this.scaleResultIncrement = [0,0,0,0];
+    	this.scaledResult = [0,0,0]; // grey, red, empty
 
 		this.redBoxes = 0;
 		this.greyBoxes = 0;
@@ -108,6 +132,10 @@ function reset() {
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
 
+	// scale increase by factor;
+	this.scaleBy = Math.ceil(1000000 / this.boxCount);
+	console.log('scaleBy ' + this.scaleBy);
+
     // create boxes
     this.createBox(this);
 
@@ -120,9 +148,12 @@ Quota.prototype.startLevel = function() {
 		this.timer.start();
 	}
 
+	// add gate to the side
 	this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
 	this.gate.width = 80;
 	this.gate.height = game.world.height;
+	this.gate.anchor.setTo(0.5,0.5);
+	this.gate.y = game.world.height/2;
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
@@ -133,9 +164,20 @@ Quota.prototype.endLevel = function() {
 		this.redBoxes++;
 	}
 
-	// show the results for debugging
-	game.debug.text('Result: ' + this.result, game.world.width-550, 128);
+	// scale report
+	for(var i = 0; i < this.result.length; i++){
+		if(this.result[i] == 'grey') this.scaleResultIncrement[0]++;
+		else if(this.result[i] == 'red') this.scaleResultIncrement[1]++;
+		else if(this.result[i] == 'empty') this.scaleResultIncrement[2]++;
+	}
+	this.scaleResultIncrement[3] = this.quota;
+	for(var i = 0; i < this.scaledResult.length; i++){
+		this.scaledResult[i] = this.scaleResultIncrement[i] * this.scaleBy;
+	}
+	console.log('scaleResultIncrement ' + this.scaleResultIncrement);
+	console.log('scaledResult ' + this.scaledResult);
 
+	// go through boxes and stop all clicked boxes and remove all else
 	for(var key in this.boxArr){
 		var arr = this.boxArr[key];
 		console.log(arr[0].name);
