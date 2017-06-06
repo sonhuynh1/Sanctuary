@@ -31,7 +31,6 @@ var loadState = {
 		this.game.load.audio('crowdWhiteNoiseLooped','assets/sound/soundfx/CrowdWhiteNoiseLooped.mp3');
 		this.game.load.audio('ding3','assets/sound/soundfx/Ding 3.mp3');
 		this.game.load.audio('gymnopedie','assets/sound/tracks/Gymnopedie No. 1.mp3');
-		this.game.load.audio('jeux','assets/sound/tracks/Jeux D Enfants.m4a');
 
 		//  Load the Google WebFont Loader script
     this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
