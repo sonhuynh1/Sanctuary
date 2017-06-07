@@ -26,9 +26,10 @@ var playState = {
 
 		// set background color
 		this.game.stage.backgroundColor = 0x8C7B6C;
-		// var background2 = game.add.sprite(0, 0, 'playBackground');// background for title state
-    // 	background2.height = game.height;
-    // 	background2.width = game.width;
+
+		var paper = game.add.sprite(game.world.width * (5.35/7), 0, 'paper');// background for title state
+    paper.height = game.world.height;
+  	paper.width = game.world.width - (game.world.width * (4.35/7));
 
 		// make boxes and add them into group
 		boxes = game.add.group();

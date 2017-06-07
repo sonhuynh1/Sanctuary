@@ -8,7 +8,7 @@ WebFontConfig = {
 
     //  The Google Fonts we want to load (specify as many as you like in the array)
     google: {
-      families: ['Black Ops One']
+      families: ['Black Ops One', 'Courier new', 'Patrick Hand SC']
     }
 
 };
@@ -24,10 +24,11 @@ var loadState = {
 		this.game.load.image('box','assets/imgs/box.jpg');
 		this.game.load.image('black','assets/imgs/Black.png');
 		this.game.load.image('background','assets/imgs/Sanctuary_Dirt.png');
-		//this.game.load.image('playBackground','assets/imgs/Sanctuary_Background.png');
+	  this.game.load.image('paper','assets/imgs/paper.jpg');
 		this.game.load.image('logo','assets/imgs/Sanctuary_Logo.png');
     this.game.load.image('gate','assets/imgs/Sanctuary_Gate.png');
-		this.game.load.spritesheet('buttons','assets/imgs/buttons.png', 256, 64);
+
+
 		this.game.load.audio('crowdWhiteNoiseLooped','assets/sound/soundfx/CrowdWhiteNoiseLooped.mp3');
 		this.game.load.audio('ding3','assets/sound/soundfx/Ding 3.mp3');
 		this.game.load.audio('gymnopedie','assets/sound/tracks/Gymnopedie No. 1.mp3');
