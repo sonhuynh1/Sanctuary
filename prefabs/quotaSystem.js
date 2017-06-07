@@ -32,25 +32,14 @@ var Quota = function(game){
 		this.greyBoxes = 0;
 		this.monthlyGrade = [];
 
-		//timer text
-		this.timerText = game.add.text(game.world.width-250, 32,'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000));
-		this.timerText.font = 'Patrick Hand SC';
+		// add custom inputs for mouse
+		// game.input.mouse.mouseWheelCallback = mouseWheel;
+		game.input.onDown.add(reset, this);
 
-
-		//Quota text
-		this.quotaText = game.add.text(game.world.width-250, 64, 'Quota: ' + this.quota);
-		this.quotaText.font = 'Patrick Hand SC';
-
-
-		//Vetted text
-		this.vettedText = game.add.text(game.world.width-250, game.world.height - 250, 'Vetted: ');
-		this.vettedText.font = 'Patrick Hand SC';
-
-
-	// add custom inputs for mouse
-	// game.input.mouse.mouseWheelCallback = mouseWheel;
-	game.input.onDown.add(reset, this);
-
+		//paper
+		this.paper = game.add.sprite(game.world.width * (5.35/7), 0, 'paper');// background for title state
+		this.paper.height = game.world.height;
+		this.paper.width = game.world.width - (game.world.width * (4.35/7));
 
 		// set up quotaSystem to start game
     this.status = 'running';
@@ -119,18 +108,27 @@ Quota.prototype.startLevel = function() {
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
 	console.log('scaleBy ' + this.scaleBy);
 
-	// add gate to the side
-	this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
-	this.gate.anchor.setTo(0.5,0.5);
-	this.gate.y = game.world.height/2;
-
     // create boxes
     this.createBox(this);
 
 		// create a quota goal and vetted list
 		this.createGoalnTime(this);
+
+		this.paper.alpha = 1;
+
+		//timer text
+		this.timerText = game.add.text(game.world.width-250, 32,'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000));
+		this.timerText.font = 'Patrick Hand SC';
+
+
+		//Quota text
+		this.quotaText = game.add.text(game.world.width-250, 64, 'Quota: ' + this.quota);
+		this.quotaText.font = 'Patrick Hand SC';
+
+		//Vetted text
+		this.vettedText = game.add.text(game.world.width-250, game.world.height - 250, 'Vetted: ');
+		this.vettedText.font = 'Patrick Hand SC';
+
 		var vet = "Vetted: "
 		for (var i = 0; i < this.vetted.length; i++) {
 				if(i == 0){
@@ -146,17 +144,23 @@ Quota.prototype.startLevel = function() {
 			this.timer.loop(5000 * this.quota, this.endLevel, this);
 			this.timer.start();
 		}
-	this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
+
+		this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
+		this.gate.width = 80;
+		this.gate.height = game.world.height;
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
 	this.endFade(this);
 	this.gate.destroy();
+	this.paper.alpha = 0;
+	this.timerText.destroy();
+	this.quotaText.destroy();
+	this.vettedText.destroy();
+	hoverData.removeText();
 
-	this.monthlyGrade[0] = (this.redBoxes - this.greyBoxes) / this.quota;
+	// this.monthlyGrade[0] = (this.redBoxes - this.greyBoxes) / this.quota;
 	// game.debug.text('Quota: ' + this.quota, game.world.width-450, 32);
 	// game.debug.text('Total amount of picked squared: ' + this.pickedBoxes.length, game.world.width-450, 64);
 	// game.debug.text('Bad squares: ' + this.redBoxes, game.world.width-450, 96);
@@ -350,4 +354,3 @@ Quota.prototype.removeFade = function() {
 
 	console.log('removing fade');
 };
-

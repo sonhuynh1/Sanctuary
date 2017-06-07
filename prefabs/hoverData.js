@@ -12,4 +12,9 @@ HoverData.constructor = HoverData;
 HoverData.prototype.hovering = function(name,id) {
 	// update text
 	this.hoverText.text = "ID: " + id + "\n" + "Name: " + name;
+	console.log('hovering over box')
+},
+HoverData.prototype.removeText = function() {
+	// update text
+	this.hoverText.text = "";
 };
