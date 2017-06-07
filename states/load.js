@@ -58,8 +58,9 @@ var loadState = {
 
 	create:function(){
 		console.log('loading');
-    talking = this.game.add.audio('crowdWhiteNoiseLooped');
-    talking.play();
+	    talking = this.game.add.audio('crowdWhiteNoiseLooped');
+	    talking.play();
+	    talking.mute = true;
 		// call menu state
 		game.state.start('menu');
 	}

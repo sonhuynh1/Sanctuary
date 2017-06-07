@@ -156,6 +156,7 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
+	this.endFade(this);
 	this.gate.destroy();
 
 	// add empty to list of result
@@ -323,4 +324,22 @@ Quota.prototype.updateVetted = function(box) {
 		this.greyBoxes++;
 	}
 	this.pickedBoxes.push(box);
+};
+Quota.prototype.endFade = function() {
+	this.fadeScreen = game.time.create(false);
+
+	this.fade = game.add.sprite(0, 0, 'black');
+	this.fade.anchor.setTo(0.5, 0.5);
+	this.fade.alpha = 0;
+	this.fade.scale.setTo(10, 10);
+
+	game.add.tween(this.fade).to( { alpha: 1 }, 3000, "Linear", true);
+	this.fadeScreen.loop(Phaser.Timer.SECOND *6, this.removeFade, this);
+	this.fadeScreen.start();
+};
+Quota.prototype.removeFade = function() {
+	game.time.events.remove(this.fadeScreen);
+	this.fade.destroy();
+
+	console.log('removing fade');
 };
