@@ -50,10 +50,27 @@ Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
 Quota.prototype.update = function(){
 	// debugging text to show timer and quota
-	if(this.level < 3) {
-		this.timerText.text = 'Time: ∞';
+	if(this.status != 'end') {
+		if(this.level < 3) {
+			this.timerText.text = 'Time: ∞';
+		} else {
+			this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
+		}
 	} else {
-		this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
+		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
+			this.scaleResultIncrement[0] += Math.ceil(this.game.rnd.frac()*this.scaledResult[0]/200);
+			this.scaleNeutralText.text = this.scaleResultIncrement[0] + " Law abiding,";
+			if(this.scaleResultIncrement[0] >= this.scaledResult[0]){
+				this.scaleBadText.x = this.scaleNeutralText.x + this.scaleNeutralText.width + 32;
+			}
+		} else if(this.scaleResultIncrement[1] < this.scaledResult[1]){
+			this.scaleResultIncrement[1] += Math.ceil(this.game.rnd.frac()*this.scaledResult[1]/200);
+			this.scaleBadText.text = this.scaleResultIncrement[1] + " Unsustainable";
+		} else if(this.scaleResultIncrement[2] < this.scaledResult[2]){
+			this.scaleResultIncrement[2] += Math.ceil(this.game.rnd.frac()*this.scaledResult[2]/200);
+		} else if(this.scaleResultIncrement[3] < this.scaledResult[3]){
+			this.scaleResultIncrement[3] += Math.ceil(this.game.rnd.frac()*this.scaledResult[3]/200);
+		}
 	}
 	// end game if all boxes are selected
 	if(this.boxCount == this.pickedBoxes.length && this.status != 'end'){
@@ -80,6 +97,7 @@ Quota.prototype.update = function(){
 // 		}
 // 	}
 // }
+
 // function to reset all the variables and boxes from one level to another
 function reset() {
 	console.log('click');
@@ -90,9 +108,9 @@ function reset() {
 
 		this.level++;
 		if(this.level == 2) {
-			this.boxCount = 25;
+			this.boxCount = 10;
 			this.vettedCount = this.boxCount;
-		} else if (this.level > 3) {
+		} else if (this.level > 2) {
 			this.boxCount *= 2;
 			this.vettedCount = this.boxCount * this.quotaQuotient;
 		}
@@ -101,7 +119,7 @@ function reset() {
 		this.vetted = [];
 		this.boxArr = {};
 		this.scaleResultIncrement = [0,0,0,0];
-    	this.scaledResult = [0,0,0]; // grey, red, empty
+    this.scaledResult = [0,0,0]; // grey, red, empty
 
 		this.redBoxes = 0;
 		this.greyBoxes = 0;
@@ -114,6 +132,17 @@ function reset() {
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
+	if(this.level > 1){
+		this.quotaText2.destroy();
+		this.totalText.destroy();
+		this.neutralText.destroy();
+		this.badText.destroy();
+
+		// bottom portion of report
+		this.scaleQuotaText.destroy();
+		this.scaleNeutralText.destroy();
+		this.scaleBadText.destroy();
+	}
 
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
@@ -174,12 +203,16 @@ Quota.prototype.endLevel = function() {
 	this.vettedText.destroy();
 	hoverData.removeText();
 
-	// this.monthlyGrade[0] = (this.redBoxes - this.greyBoxes) / this.quota;
-	this.quotaText2 = game.add.text(game.world.centerX, game.world.centerY+150, "Quota: " + this.quota);
-	this.totalSquaresText = game.add.text(game.world.centerX, game.world.centerY-150, "Total amount of picked squared: " + this.pickedBoxes.length);
-	this.badSquaresText = game.add.text(game.world.centerX+150, game.world.centerY, "Bad squares: " + this.redBoxes);
-	this.neutralSquaresText = game.add.text(game.world.centerX-150, game.world.centerY, "Neutral squares: " + this.greyBoxes);
+	// top portion of report
+	this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
+	this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
+	this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding,");
+	this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
 
+	// bottom portion of report
+	this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
+	this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
+	this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
 	// add empty to list of result
 	while(this.result.length < this.quota){
@@ -312,7 +345,7 @@ Quota.prototype.createBox = function() {
 		var box = new Box(this.game);
 		console.log(box.id);
 		console.log(box.name);
-		var ran = game.rnd.between(0,3);
+		var ran = game.rnd.between(0,5);
 		if(ran == 0){
 			box.GOOD = true;
 		}
