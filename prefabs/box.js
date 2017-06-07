@@ -157,7 +157,7 @@ Box.prototype.picked = function(){
 	this.SPEED = 0;
 	this.TURN_RATE = 0;
 	// this.x = -this.width;
-	this.alpha = 0.5;
+	// this.alpha = 0.5;
 	this.angle = 0;
 };
 
