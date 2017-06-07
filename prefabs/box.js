@@ -2,7 +2,7 @@
 var Box = function(game){
 	Phaser.Sprite.call(this,game,
 		game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH),'box');
-	this.ptint = game.rnd.between(0,255);
+	this.ptint = game.rnd.between(100,255);
 	this.tint = this.ptint;
 
 	// enable to be clicked or hovered over
@@ -52,7 +52,7 @@ var Box = function(game){
 	this.VETTED = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
-	this.disappearDistance = game.world.width * (4.3/7)-this.width*1.5;
+	this.disappearDistance = game.world.width * (5.3/7)-this.width*1.5;
 };
 
 Box.prototype = Object.create(Phaser.Sprite.prototype);
