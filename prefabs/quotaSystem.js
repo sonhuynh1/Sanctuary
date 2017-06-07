@@ -60,13 +60,13 @@ Quota.prototype.update = function(){
 		game.debug.text('Result: ' + this.result, game.world.width-450, game.world.height - 100);
 		
 		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
-			this.scaleResultIncrement[0] += Math.ceil(this.game.rnd.frac()*this.scaledResult[0]/100);
+			this.scaleResultIncrement[0] += Math.ceil(this.game.rnd.frac()*this.scaledResult[0]/200);
 		} else if(this.scaleResultIncrement[1] < this.scaledResult[1]){
-			this.scaleResultIncrement[1] += Math.ceil(this.game.rnd.frac()*this.scaledResult[1]/100);
+			this.scaleResultIncrement[1] += Math.ceil(this.game.rnd.frac()*this.scaledResult[1]/200);
 		} else if(this.scaleResultIncrement[2] < this.scaledResult[2]){
-			this.scaleResultIncrement[2] += Math.ceil(this.game.rnd.frac()*this.scaledResult[2]/100);
+			this.scaleResultIncrement[2] += Math.ceil(this.game.rnd.frac()*this.scaledResult[2]/200);
 		} else if(this.scaleResultIncrement[3] < this.scaledResult[3]){
-			this.scaleResultIncrement[3] += Math.ceil(this.game.rnd.frac()*this.scaledResult[3]/100);
+			this.scaleResultIncrement[3] += Math.ceil(this.game.rnd.frac()*this.scaledResult[3]/200);
 		}
 
 		game.debug.text('Result: ' + this.scaleResultIncrement, game.world.width-450, game.world.height - 50);
@@ -171,6 +171,7 @@ Quota.prototype.endLevel = function() {
 		else if(this.result[i] == 'empty') this.scaleResultIncrement[2]++;
 	}
 	this.scaleResultIncrement[3] = this.quota;
+	this.result = this.scaleResultIncrement;
 	for(var i = 0; i < this.scaledResult.length; i++){
 		this.scaledResult[i] = this.scaleResultIncrement[i] * this.scaleBy;
 	}
@@ -232,7 +233,10 @@ Quota.prototype.createGoalnTime = function() {
 	console.log('creating goal');
 
 	// set quota and length of vetted array
-	this.quota = this.level;
+	if(this.level < 3){
+		this.quota = this.boxCount;
+
+	}
 	var vettedQuantity = this.vettedCount;
 
 	// for loop to keep track of boxArr keys
@@ -251,8 +255,8 @@ Quota.prototype.createGoalnTime = function() {
 			var arr = this.boxArr[key];
 			var random1 = game.rnd.between(0, arr.length-1);
 			if(!arr[random1].VETTED){
-				this.vetted.push(arr[random1].id);
 				arr[random1].VETTED = true;
+				this.vetted.push(arr[random1].id);
 				vettedQuantity--;
 			}
 		}
@@ -282,9 +286,8 @@ Quota.prototype.createBox = function() {
 };
 Quota.prototype.updateVetted = function(box) {
 	// checks box against vetted
-	console.log('updating vetted ' + box.VETTED);
 	for(i = 0; i <= this.vetted.length; i++){
-		if(this.vetted[i] == box.name && box.VETTED == true){
+		if(this.vetted[i] == box.id && box.VETTED == true){
 			box.GOOD = true;
 			this.result.push("grey");
 			this.greyBoxes++;
