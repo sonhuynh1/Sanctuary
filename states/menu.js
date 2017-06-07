@@ -48,7 +48,7 @@ var menuState = {
 
 	songIn:function(){
 		talking.fadeIn(5000);
-		talking.volume = 0.5;
+		talking.volume = 0.1;
 	},
 
 	afterIntro:function(){

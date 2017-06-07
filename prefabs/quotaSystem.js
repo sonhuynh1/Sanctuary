@@ -33,7 +33,7 @@ var Quota = function(game){
 	this.monthlyGrade = [];
 
 	// add custom inputs for mouse
-	game.input.mouse.mouseWheelCallback = mouseWheel;
+	// game.input.mouse.mouseWheelCallback = mouseWheel;
 	game.input.onDown.add(reset, this);
 
 	// set up quotaSystem to start game
@@ -56,7 +56,6 @@ Quota.prototype.update = function(){
 		game.debug.text('Neutral squares: ' + this.greyBoxes, game.world.width-450, 128);
 
 		// show the results for debugging
-
 		game.debug.text('Result: ' + this.result, game.world.width-450, game.world.height - 100);
 		
 		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
@@ -85,24 +84,24 @@ Quota.prototype.update = function(){
 };
 
 // function to scroll the list of boxes at the end of a level
-function mouseWheel(event) {
-	if(quotaSystem.status == 'end'){
-		// scroll down
-		if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
-			((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
-			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-				quotaSystem.pickedBoxes[i-1].y -= 15
-			}
-		}
-		// scroll up
-		else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
-			((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
-			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-				quotaSystem.pickedBoxes[i-1].y += 15
-			}
-		}
-	}
-}
+// function mouseWheel(event) {
+// 	if(quotaSystem.status == 'end'){
+// 		// scroll down
+// 		if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
+// 			((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
+// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
+// 				quotaSystem.pickedBoxes[i-1].y -= 15;
+// 			}
+// 		}
+// 		// scroll up
+// 		else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
+// 			((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
+// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
+// 				quotaSystem.pickedBoxes[i-1].y += 15;
+// 			}
+// 		}
+// 	}
+// }
 // function to reset all the variables and boxes from one level to another
 function reset() {
 	console.log('click');
@@ -111,7 +110,6 @@ function reset() {
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
 
-	    // this.quota = 0;
 		this.level++;
 		this.result = []; // grey, red, empty
 		this.pickedBoxes = [];
@@ -136,6 +134,13 @@ Quota.prototype.startLevel = function() {
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
 	console.log('scaleBy ' + this.scaleBy);
 
+	// add gate to the side
+	this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
+	this.gate.width = 80;
+	this.gate.height = game.world.height;
+	this.gate.anchor.setTo(0.5,0.5);
+	this.gate.y = game.world.height/2;
+
     // create boxes
     this.createBox(this);
 
@@ -147,21 +152,66 @@ Quota.prototype.startLevel = function() {
 		this.timer.loop(1000 * this.quota, this.endLevel, this);
 		this.timer.start();
 	}
-
-	// add gate to the side
-	this.gate = game.add.sprite(game.world.width * (4/7),0,'gate');
-	this.gate.width = 80;
-	this.gate.height = game.world.height;
-	this.gate.anchor.setTo(0.5,0.5);
-	this.gate.y = game.world.height/2;
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
+
+	this.gate.destroy();
 
 	// add empty to list of result
 	while(this.result.length < this.quota){
 		this.result.push("empty");
 		this.redBoxes++;
+	}
+
+	// move pickedBoxes into place
+	for(var i = 0; i < this.pickedBoxes.length; i++){
+		var x;
+		var y;
+
+		var xMargin = game.world.width/8;
+		var yMargin = game.world.height/8;
+		if(this.result[i] == 'red'){
+			this.pickedBoxes[i].tint = 0xff0000;
+
+			// keep red squares at lower right corner
+			x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
+			y = game.rnd.between(game.world.height/2 + yMargin, game.world.height - yMargin);
+		} else if(this.result[i] == 'grey'){
+			this.pickedBoxes[i].tint = 0x9C9C9C;
+
+			// keep grey squares at upper right corner
+			x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
+			y = game.rnd.between(yMargin, game.world.height/2 - yMargin);
+		}
+		this.pickedBoxes[i].x = x;
+		this.pickedBoxes[i].y = y;
+		this.pickedBoxes[i].newDest = [x,y];
+
+		// if(i == 1){
+		// 	if(this.result[i-1] == 'red'){
+		// 		this.pickedBoxes[i-1].tint = 0xff0000;
+		// 	}else if(this.result[i-1] == 'grey'){
+		// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
+		// 	}
+		// 	x = game.world.width * (4.3/7)+40;
+		// 	y = this.pickedBoxes[i-1].height*2;
+
+		// 	this.pickedBoxes[i-1].x = x;
+		// 	this.pickedBoxes[i-1].y = y;
+		// }else{
+		// 	if(this.result[i-1] == 'red'){
+		// 		this.pickedBoxes[i-1].tint = 0xff0000;
+		// 	}else if(this.result[i-1] == 'grey'){
+		// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
+		// 	}
+		// 	x = game.world.width * (4.3/7)+40;
+		// 	y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
+
+		// 	this.pickedBoxes[i-1].x = x;
+		// 	this.pickedBoxes[i-1].y = y;
+		// }
+		// this.pickedBoxes[i-1].newDest = [x,y];
 	}
 
 	// scale report
@@ -171,8 +221,9 @@ Quota.prototype.endLevel = function() {
 		else if(this.result[i] == 'empty') this.scaleResultIncrement[2]++;
 	}
 	this.scaleResultIncrement[3] = this.quota;
-	this.result = this.scaleResultIncrement;
+	this.result = [];
 	for(var i = 0; i < this.scaledResult.length; i++){
+		this.result[i] = this.scaleResultIncrement[i];
 		this.scaledResult[i] = this.scaleResultIncrement[i] * this.scaleBy;
 	}
 	console.log('scaleResultIncrement ' + this.scaleResultIncrement);
@@ -196,37 +247,6 @@ Quota.prototype.endLevel = function() {
 	// stop time and set level to end
 	this.status = 'end';
 	this.timer.stop();
-
-	// align pickedBoxes together for display
-	for(var i = 1; i <= this.pickedBoxes.length; i++){
-		var x;
-		var y;
-
-		if(i == 1){
-			if(this.result[i-1] == 'red'){
-				this.pickedBoxes[i-1].tint = 0xff0000;
-			}else if(this.result[i-1] == 'grey'){
-				this.pickedBoxes[i-1].tint = 0x9C9C9C;
-			}
-			x = game.world.width * (4.3/7)+40;
-			y = this.pickedBoxes[i-1].height*2;
-
-			this.pickedBoxes[i-1].x = x;
-			this.pickedBoxes[i-1].y = y;
-		}else{
-			if(this.result[i-1] == 'red'){
-				this.pickedBoxes[i-1].tint = 0xff0000;
-			}else if(this.result[i-1] == 'grey'){
-				this.pickedBoxes[i-1].tint = 0x9C9C9C;
-			}
-			x = game.world.width * (4.3/7)+40;
-			y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
-
-			this.pickedBoxes[i-1].x = x;
-			this.pickedBoxes[i-1].y = y;
-		}
-		this.pickedBoxes[i-1].newDest = [x,y];
-	}
 };
 
 Quota.prototype.createGoalnTime = function() {
@@ -235,7 +255,8 @@ Quota.prototype.createGoalnTime = function() {
 	// set quota and length of vetted array
 	if(this.level < 3){
 		this.quota = this.boxCount;
-
+	} else {
+		this.quota = this.boxCount;
 	}
 	var vettedQuantity = this.vettedCount;
 

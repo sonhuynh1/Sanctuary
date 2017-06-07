@@ -26,7 +26,7 @@ var loadState = {
 		this.game.load.image('background','assets/imgs/Sanctuary_Dirt.png');
 		//this.game.load.image('playBackground','assets/imgs/Sanctuary_Background.png');
 		this.game.load.image('logo','assets/imgs/Sanctuary_Logo.png');
-    this.game.load.image('gate','assets/imgs/Sanctuary_Gate.png');
+    	this.game.load.image('gate','assets/imgs/Sanctuary_Gate.png');
 		this.game.load.spritesheet('buttons','assets/imgs/buttons.png', 256, 64);
 		this.game.load.audio('crowdWhiteNoiseLooped','assets/sound/soundfx/CrowdWhiteNoiseLooped.mp3');
 		this.game.load.audio('ding3','assets/sound/soundfx/Ding 3.mp3');
@@ -34,7 +34,7 @@ var loadState = {
 		this.game.load.audio('jeux','assets/sound/tracks/Jeux D Enfants.m4a');
 
 		//  Load the Google WebFont Loader script
-    this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+		this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 
 		/*Sounds*/
 		//this.game.load.audio('ding','assets/sound/soundfx/Ding.mp3');
