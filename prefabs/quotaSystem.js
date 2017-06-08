@@ -10,7 +10,7 @@ var Quota = function(game){
     // custom variables for construct
     this.quota = 0;
 		this.quotaQuotient = 0.5;
-    this.level = 1;
+    this.level = 2;
 
     // total boxes
     this.boxCount = 5;
@@ -45,6 +45,11 @@ var Quota = function(game){
 		//music variables
 		this.idealMusic = this.game.add.audio('gymnopedie');
 		this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
+		this.reportDing = this.game.add.audio('ding3');
+		this.terrorMusic = this.game.add.audio('terror');
+
+		//check if faded out
+		this.faded = false;
 
 		// set up quotaSystem to start game
     this.status = 'running';
@@ -109,34 +114,61 @@ function reset() {
 		for(var i = 0; i < this.pickedBoxes.length; i++){
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
-
 		this.level++;
-		if(this.level == 2) {
-			this.boxCount = 10;
-			this.vettedCount = this.boxCount;
-		} else if (this.level > 2) {
-			this.boxCount *= 2;
-			this.vettedCount = this.boxCount * this.quotaQuotient;
+		if(this.level == 3){
+			this.talking.mute = true;
+			this.terrorMusic.play();
+			this.endFade(this);
+			// this.terrorMusic.stop();
+			if(this.level == 2) {
+				this.boxCount = 10;
+				this.vettedCount = this.boxCount;
+			} else if (this.level > 2) {
+				this.boxCount *= 2;
+				this.vettedCount = this.boxCount * this.quotaQuotient;
+			}
+			this.result = []; // grey, red, empty
+			this.pickedBoxes = [];
+			this.vetted = [];
+			this.boxArr = {};
+			this.scaleResultIncrement = [0,0,0,0];
+	    this.scaledResult = [0,0,0]; // grey, red, empty
+
+			this.redBoxes = 0;
+			this.greyBoxes = 0;
+			this.monthlyGrade = [];
+			if(this.faded == true){
+			  this.status = 'running';
+			  this.startLevel(this);
+			}
+		}else{
+			if(this.level == 2) {
+				this.boxCount = 10;
+				this.vettedCount = this.boxCount;
+			} else if (this.level > 2) {
+				this.boxCount *= 2;
+				this.vettedCount = this.boxCount * this.quotaQuotient;
+			}
+			this.result = []; // grey, red, empty
+			this.pickedBoxes = [];
+			this.vetted = [];
+			this.boxArr = {};
+			this.scaleResultIncrement = [0,0,0,0];
+	    this.scaledResult = [0,0,0]; // grey, red, empty
+
+			this.redBoxes = 0;
+			this.greyBoxes = 0;
+			this.monthlyGrade = [];
+
+		    this.status = 'running';
+		    this.startLevel(this);
 		}
-		this.result = []; // grey, red, empty
-		this.pickedBoxes = [];
-		this.vetted = [];
-		this.boxArr = {};
-		this.scaleResultIncrement = [0,0,0,0];
-    this.scaledResult = [0,0,0]; // grey, red, empty
-
-		this.redBoxes = 0;
-		this.greyBoxes = 0;
-		this.monthlyGrade = [];
-
-	    this.status = 'running';
-	    this.startLevel(this);
 	}
 }
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level');
-	if(this.level > 1){
+	if(this.level > 2){
 		this.quotaText2.destroy();
 		this.totalText.destroy();
 		this.neutralText.destroy();
@@ -147,6 +179,7 @@ Quota.prototype.startLevel = function() {
 		this.scaleNeutralText.destroy();
 		this.scaleBadText.destroy();
 	}
+
 
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
@@ -167,6 +200,7 @@ Quota.prototype.startLevel = function() {
 			this.idealMusic.play();
 			this.talking.volume = .3;
 		}else{
+			this.talking.mute = false;
 			this.talking.volume = .6;
 		}
 
@@ -208,7 +242,10 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
-	this.music.stop();
+	if(this.level <= 2){
+		this.idealMusic.stop();
+	}
+	this.reportDing.play();
 	this.talking.stop();
 	this.endFade(this);
 	this.gate.destroy();
@@ -396,6 +433,7 @@ Quota.prototype.updateVetted = function(box) {
 	this.pickedBoxes.push(box);
 };
 Quota.prototype.endFade = function() {
+	this.faded = false;
 	this.fadeScreen = game.time.create(false);
 
 	this.fade = game.add.sprite(0, 0, 'black');
@@ -404,11 +442,15 @@ Quota.prototype.endFade = function() {
 	this.fade.scale.setTo(10, 10);
 
 	game.add.tween(this.fade).to( { alpha: 0 }, 4000, "Linear", true, 2000);
-	this.fadeScreen.loop(Phaser.Timer.SECOND *6, this.removeFade, this);
+	this.fadeScreen.loop(Phaser.Timer.SECOND *5, this.removeFade, this);
 	this.fadeScreen.start();
+
 };
 Quota.prototype.removeFade = function() {
+	this.faded = true;
 	game.time.events.remove(this.fadeScreen);
+	console.log(this.fadeScreen);
+	// this.reportDing.stop();
 	this.fade.destroy();
 
 	console.log('removing fade');
