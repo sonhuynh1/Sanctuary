@@ -115,6 +115,7 @@ function reset() {
 		for(var i = 0; i < this.pickedBoxes.length; i++){
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
+
 		this.level++;
 
 		if(this.level > 1) {
@@ -179,6 +180,7 @@ function reset() {
   			this.endFade(this);
 		}
 	}else if(this.status == 'begin') {
+		this.quote.destroy();
 		this.status = 'running';
 		this.startLevel(this);
 	}
@@ -472,16 +474,16 @@ Quota.prototype.endFade = function() {
 	if(this.level == 3){
 		console.log('fade in level 2');
 		this.idealMusic.stop();
-		game.add.tween(this.fade).to( { alpha: 0 }, 8000, "Linear", true, 2000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *10, this.removeFade, this);
+		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
 	}else if(this.status == 'b4begin'){
 		console.log('fade in begin');
-		game.add.tween(this.fade).to( { alpha: 0 }, 2000, "Linear", true, 2000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *4, this.removeFade, this);
+		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
 	}else{
 		console.log('fade regular');
-		game.add.tween(this.fade).to( { alpha: 0 }, 2000, "Linear", true, 2000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *4, this.removeFade, this);
+		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
 	}
 	this.fadeScreen.start();
 };
@@ -496,6 +498,16 @@ Quota.prototype.removeFade = function() {
 	this.fade.destroy();
 
 	if(this.status == 'b4begin'){
+		if(this.level == 1) {
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, we will have all the time in the world\nto help',
+			{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+		}else if(this.level == 2) {
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, there\'s room for everyone',
+			{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+		}
+		this.quote.font = 'Black Ops One';
+		this.quote.anchor.setTo(0.5);
+
 		this.status = 'begin';
 	}
 
