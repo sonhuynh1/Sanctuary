@@ -221,6 +221,7 @@ Quota.prototype.startLevel = function() {
 		this.idealMusic.play();
 		this.talking.volume = .1;
 	}else{
+		game.stage.backgroundColor = 0x8C7B6C;
 		this.talking.mute = false;
 		this.talking.volume = .4;
 	}
@@ -500,10 +501,16 @@ Quota.prototype.removeFade = function() {
 	if(this.status == 'b4begin'){
 		if(this.level == 1) {
 			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, we will have all the time in the world\nto help',
-			{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
 		}else if(this.level == 2) {
 			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, there\'s room for everyone',
-			{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
+		}else if(this.level == 3) {
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'But reality is different',
+			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+		}else{
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
+			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 		}
 		this.quote.font = 'Black Ops One';
 		this.quote.anchor.setTo(0.5);

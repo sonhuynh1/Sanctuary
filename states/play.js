@@ -25,7 +25,7 @@ var playState = {
 		game.input.mouse.capture = true;
 
 		// set background color
-		this.game.stage.backgroundColor = 0x8C7B6C;
+		this.game.stage.backgroundColor = 0x86b74b;
 
 		// make boxes and add them into group
 		boxes = game.add.group();
