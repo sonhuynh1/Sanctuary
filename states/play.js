@@ -36,6 +36,7 @@ var playState = {
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);
+		hoverData.removeText();
 		game.add.existing(hoverData);
 
 		//var gate = game.add.sprite(0, 0, 'gate')

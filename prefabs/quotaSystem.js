@@ -41,6 +41,7 @@ var Quota = function(game){
 	this.paper = game.add.sprite(game.world.width * (5.35/7), 0, 'paper');// background for title state
 	this.paper.height = game.world.height;
 	this.paper.width = game.world.width - (game.world.width * (4.35/7));
+	this.paper.alpha = 0;
 
 	//music variables
 	this.idealMusic = this.game.add.audio('gymnopedie');
@@ -52,16 +53,14 @@ var Quota = function(game){
 	this.faded = false;
 
 	// set up quotaSystem to start game
-    this.status = 'running';
-    this.startLevel(this);
+    this.status = 'b4begin';
+    this.endFade(this);
 };
 Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
 Quota.prototype.update = function(){
-	game.debug.text("Queued events: " + game.time.events.length, 32, 32);
-
 	// debugging text to show timer and quota
-	if(this.status != 'end') {
+	if(this.status == 'running') {
 		if(this.level < 3) {
 			this.timerText.text = 'Time: ∞';
 		} else {
@@ -117,8 +116,23 @@ function reset() {
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
 		this.level++;
+
+		if(this.level > 1) {
+			// clear top portion of report
+			this.quotaText2.destroy();
+			this.totalText.destroy();
+			this.neutralText.destroy();
+			this.badText.destroy();
+
+			// clear bottom portion of report
+			this.scaleQuotaText.destroy();
+			this.scaleNeutralText.destroy();
+			this.scaleBadText.destroy();
+		}
+
 		if(this.level == 3){
 			this.talking.mute = true;
+			this.terrorMusic.volume = 0.5;
 			this.terrorMusic.play();
 			// this.terrorMusic.stop();
 			if(this.level == 2) {
@@ -138,10 +152,10 @@ function reset() {
 			this.redBoxes = 0;
 			this.greyBoxes = 0;
 			this.monthlyGrade = [];
-			if(this.faded == true){
-			  this.status = 'running';
-			  this.startLevel(this);
-			}
+			// if(this.faded == true){
+  			this.status = 'b4begin';
+  			this.endFade(this);
+			// }
 		}else{
 			if(this.level == 2) {
 				this.boxCount = 10;
@@ -161,27 +175,30 @@ function reset() {
 			this.greyBoxes = 0;
 			this.monthlyGrade = [];
 
-		    this.status = 'running';
-		    this.startLevel(this);
+		    this.status = 'b4begin';
+  			this.endFade(this);
 		}
+	}else if(this.status == 'begin') {
+		this.status = 'running';
+		this.startLevel(this);
 	}
 }
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level ' + this.level);
 
-	if(this.level > 1) {
-		// clear top portion of report
-		this.quotaText2.destroy();
-		this.totalText.destroy();
-		this.neutralText.destroy();
-		this.badText.destroy();
+	// if(this.level > 1) {
+	// 	// clear top portion of report
+	// 	this.quotaText2.destroy();
+	// 	this.totalText.destroy();
+	// 	this.neutralText.destroy();
+	// 	this.badText.destroy();
 
-		// clear bottom portion of report
-		this.scaleQuotaText.destroy();
-		this.scaleNeutralText.destroy();
-		this.scaleBadText.destroy();
-	}
+	// 	// clear bottom portion of report
+	// 	this.scaleQuotaText.destroy();
+	// 	this.scaleNeutralText.destroy();
+	// 	this.scaleBadText.destroy();
+	// }
 
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
@@ -452,13 +469,19 @@ Quota.prototype.endFade = function() {
 	// quote.font = 'Black Ops One';
 	// quote.anchor.setTo(0.5);
 
-	if(this.level == 2){
+	if(this.level == 3){
+		console.log('fade in level 2');
 		this.idealMusic.stop();
 		game.add.tween(this.fade).to( { alpha: 0 }, 8000, "Linear", true, 2000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *510, this.removeFade, this);
+		this.fadeScreen.add(Phaser.Timer.SECOND *10, this.removeFade, this);
+	}else if(this.status == 'b4begin'){
+		console.log('fade in begin');
+		game.add.tween(this.fade).to( { alpha: 0 }, 2000, "Linear", true, 2000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *4, this.removeFade, this);
 	}else{
-		game.add.tween(this.fade).to( { alpha: 0 }, 4000, "Linear", true, 2000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *6, this.removeFade, this);
+		console.log('fade regular');
+		game.add.tween(this.fade).to( { alpha: 0 }, 2000, "Linear", true, 2000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *4, this.removeFade, this);
 	}
 	this.fadeScreen.start();
 };
@@ -469,7 +492,12 @@ Quota.prototype.removeFade = function() {
 	console.log('level: ' + this.level);
 	console.log(this.fadeScreen);
 	// this.reportDing.stop();
+
 	this.fade.destroy();
+
+	if(this.status == 'b4begin'){
+		this.status = 'begin';
+	}
 
 	console.log('removing fade');
 };

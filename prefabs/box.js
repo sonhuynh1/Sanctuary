@@ -46,7 +46,7 @@ var Box = function(game){
 	this.body.onWorldBounds.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 100; // pixels/second
+	this.SPEED = 50; // pixels/second
 	this.TURN_RATE = 50; // degrees/frame
 	this.GOOD = false;
 	this.VETTED = false;
@@ -133,7 +133,7 @@ function outSprite() {
 function click (box) {
 	console.log('clicked on ' + this.name);
 	//this.tint = 0xff0000;
-	this.SPEED*=5;
+	this.SPEED*=3;
 	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
 	this.inputEnabled = false;
 	this.body.checkCollision.right = false;

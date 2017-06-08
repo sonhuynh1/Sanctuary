@@ -5,7 +5,6 @@ var HoverData = function(game){
 
 		this.hoverText = game.add.text(game.world.width-250, 128, "ID: " + "\n" + "Age: " );
 		this.hoverText.font = 'Patrick Hand SC';
-
 };
 HoverData.prototype = Object.create(Phaser.Text.prototype);
 HoverData.constructor = HoverData;
