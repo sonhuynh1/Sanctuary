@@ -58,6 +58,8 @@ var Quota = function(game){
 Quota.prototype = Object.create(Phaser.Text.prototype);
 Quota.constructor = Quota;
 Quota.prototype.update = function(){
+	game.debug.text("Queued events: " + game.time.events.length, 32, 32);
+
 	// debugging text to show timer and quota
 	if(this.status != 'end') {
 		if(this.level < 3) {
@@ -68,7 +70,7 @@ Quota.prototype.update = function(){
 	} else {
 		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
 			this.scaleResultIncrement[0] += Math.ceil(this.game.rnd.frac()*this.scaledResult[0]/200);
-			this.scaleNeutralText.text = this.scaleResultIncrement[0] + " Law abiding,";
+			this.scaleNeutralText.text = this.scaleResultIncrement[0] + " Law abiding";
 			if(this.scaleResultIncrement[0] >= this.scaledResult[0]){
 				this.scaleBadText.x = this.scaleNeutralText.x + this.scaleNeutralText.width + 32;
 			}
@@ -118,7 +120,6 @@ function reset() {
 		if(this.level == 3){
 			this.talking.mute = true;
 			this.terrorMusic.play();
-			this.endFade(this);
 			// this.terrorMusic.stop();
 			if(this.level == 2) {
 				this.boxCount = 10;
@@ -132,7 +133,7 @@ function reset() {
 			this.vetted = [];
 			this.boxArr = {};
 			this.scaleResultIncrement = [0,0,0,0];
-	    this.scaledResult = [0,0,0]; // grey, red, empty
+	    	this.scaledResult = [0,0,0]; // grey, red, empty
 
 			this.redBoxes = 0;
 			this.greyBoxes = 0;
@@ -154,7 +155,7 @@ function reset() {
 			this.vetted = [];
 			this.boxArr = {};
 			this.scaleResultIncrement = [0,0,0,0];
-	    this.scaledResult = [0,0,0]; // grey, red, empty
+	    	this.scaledResult = [0,0,0]; // grey, red, empty
 
 			this.redBoxes = 0;
 			this.greyBoxes = 0;
@@ -180,7 +181,6 @@ Quota.prototype.startLevel = function() {
 		this.scaleBadText.destroy();
 	}
 
-
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
 	console.log('scaleBy ' + this.scaleBy);
@@ -188,65 +188,67 @@ Quota.prototype.startLevel = function() {
     // create boxes
     this.createBox(this);
 
-		// create a quota goal and vetted list
-		this.createGoalnTime(this);
+	// create a quota goal and vetted list
+	this.createGoalnTime(this);
 
-		this.paper.alpha = 1;
+	this.paper.alpha = 1;
 
-		this.talking.play();
+	this.talking.play();
 
 
-		if(this.level <= 2){
-			this.idealMusic.play();
-			this.talking.volume = .3;
-		}else{
-			this.talking.mute = false;
-			this.talking.volume = .6;
-		}
+	if(this.level <= 2){
+		this.idealMusic.play();
+		this.talking.volume = .1;
+	}else{
+		this.talking.mute = false;
+		this.talking.volume = .6;
+	}
 
-		//month text
-		this.monthText = game.add.text(game.world.width-250, 32,'Month: ' + this.level);
-		this.monthText.font = 'Patrick Hand SC';
+	//month text
+	this.monthText = game.add.text(game.world.width-250, 32,'Month: ' + this.level);
+	this.monthText.font = 'Patrick Hand SC';
 
-		//timer text
-		this.timerText = game.add.text(game.world.width-250, 64,'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000));
-		this.timerText.font = 'Patrick Hand SC';
+	//timer text
+	this.timerText = game.add.text(game.world.width-250, 64,'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000));
+	this.timerText.font = 'Patrick Hand SC';
 
-		//Quota text
-		this.quotaText = game.add.text(game.world.width-250, 96, 'Quota: ' + this.quota);
-		this.quotaText.font = 'Patrick Hand SC';
+	//Quota text
+	this.quotaText = game.add.text(game.world.width-250, 96, 'Quota: ' + this.quota);
+	this.quotaText.font = 'Patrick Hand SC';
 
-		//Vetted text
-		this.vettedText = game.add.text(game.world.width-250, 192, 'Vetted: ');
-		this.vettedText.font = 'Patrick Hand SC';
+	//Vetted text
+	this.vettedText = game.add.text(game.world.width-250, 192, 'Vetted: ');
+	this.vettedText.font = 'Patrick Hand SC';
 
-		var vet = "Vetted: "
-		for (var i = 0; i < this.vetted.length; i++) {
-				if(i == 0){
-					vet +=  this.vetted[i] + "\n";
-				}else{
-					vet += "														" + this.vetted[i] + "\n";
-				}
-		}
-		this.vettedText.text = vet;
+	var vet = "Vetted: "
+	for (var i = 0; i < this.vetted.length; i++) {
+			if(i == 0){
+				vet +=  this.vetted[i] + "\n";
+			}else{
+				vet += "														" + this.vetted[i] + "\n";
+			}
+	}
+	this.vettedText.text = vet;
+
     //  start the timer running - this is important!
     if(this.level > 2){
-			this.timer.loop(2250 * this.boxCount, this.endLevel, this);
-			this.timer.start();
-		}
+		this.timer.loop(2250 * this.boxCount, this.endLevel, this);
+		this.timer.start();
+	}
 
-		this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
-		this.gate.width = 80;
-		this.gate.height = game.world.height;
+	this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
+	this.gate.width = 80;
+	this.gate.height = game.world.height;
 };
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
 	if(this.level <= 2){
 		this.idealMusic.stop();
+	}else{
+		this.talking.stop();
 	}
 	this.reportDing.play();
-	this.talking.stop();
 	this.endFade(this);
 	this.gate.destroy();
 	this.paper.alpha = 0;
@@ -259,7 +261,7 @@ Quota.prototype.endLevel = function() {
 	// top portion of report
 	this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
 	this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
-	this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding,");
+	this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
 	this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
 
 	// bottom portion of report
@@ -442,13 +444,14 @@ Quota.prototype.endFade = function() {
 	this.fade.scale.setTo(10, 10);
 
 	game.add.tween(this.fade).to( { alpha: 0 }, 4000, "Linear", true, 2000);
-	this.fadeScreen.loop(Phaser.Timer.SECOND *5, this.removeFade, this);
+	this.fadeScreen.add(Phaser.Timer.SECOND *5, this.removeFade, this);
 	this.fadeScreen.start();
-
 };
 Quota.prototype.removeFade = function() {
 	this.faded = true;
-	game.time.events.remove(this.fadeScreen);
+	// game.time.events.remove(this.fadeScreen);
+	this.fadeScreen.remove();
+	console.log('level: ' + this.level);
 	console.log(this.fadeScreen);
 	// this.reportDing.stop();
 	this.fade.destroy();
