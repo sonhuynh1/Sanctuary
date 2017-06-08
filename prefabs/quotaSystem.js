@@ -9,8 +9,8 @@ var Quota = function(game){
 
     // custom variables for construct
     this.quota = 0;
-		this.quotaQuotient = 0.5;
-    this.level = 2;
+	this.quotaQuotient = 0.5;
+    this.level = 1;
 
     // total boxes
     this.boxCount = 5;
@@ -29,29 +29,29 @@ var Quota = function(game){
     this.scaledResult = [0,0,0,0]; // grey, red, empty, quota
 
     // tracker variables for end report
-		this.redBoxes = 0;
-		this.greyBoxes = 0;
-		this.monthlyGrade = [];
+	this.redBoxes = 0;
+	this.greyBoxes = 0;
+	this.monthlyGrade = [];
 
-		// add custom inputs for mouse
-		// game.input.mouse.mouseWheelCallback = mouseWheel;
-		game.input.onDown.add(reset, this);
+	// add custom inputs for mouse
+	// game.input.mouse.mouseWheelCallback = mouseWheel;
+	game.input.onDown.add(reset, this);
 
-		//paper
-		this.paper = game.add.sprite(game.world.width * (5.35/7), 0, 'paper');// background for title state
-		this.paper.height = game.world.height;
-		this.paper.width = game.world.width - (game.world.width * (4.35/7));
+	//paper
+	this.paper = game.add.sprite(game.world.width * (5.35/7), 0, 'paper');// background for title state
+	this.paper.height = game.world.height;
+	this.paper.width = game.world.width - (game.world.width * (4.35/7));
 
-		//music variables
-		this.idealMusic = this.game.add.audio('gymnopedie');
-		this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
-		this.reportDing = this.game.add.audio('ding3');
-		this.terrorMusic = this.game.add.audio('terror');
+	//music variables
+	this.idealMusic = this.game.add.audio('gymnopedie');
+	this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
+	this.reportDing = this.game.add.audio('ding3');
+	this.terrorMusic = this.game.add.audio('terror');
 
-		//check if faded out
-		this.faded = false;
+	//check if faded out
+	this.faded = false;
 
-		// set up quotaSystem to start game
+	// set up quotaSystem to start game
     this.status = 'running';
     this.startLevel(this);
 };
@@ -125,7 +125,7 @@ function reset() {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
 			} else if (this.level > 2) {
-				this.boxCount *= 2;
+				this.boxCount *= 2.5 * this.quotaQuotient;
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
 			this.result = []; // grey, red, empty
@@ -168,14 +168,16 @@ function reset() {
 }
 
 Quota.prototype.startLevel = function() {
-	console.log('starting level');
-	if(this.level > 2){
+	console.log('starting level ' + this.level);
+
+	if(this.level > 1) {
+		// clear top portion of report
 		this.quotaText2.destroy();
 		this.totalText.destroy();
 		this.neutralText.destroy();
 		this.badText.destroy();
 
-		// bottom portion of report
+		// clear bottom portion of report
 		this.scaleQuotaText.destroy();
 		this.scaleNeutralText.destroy();
 		this.scaleBadText.destroy();
@@ -201,7 +203,7 @@ Quota.prototype.startLevel = function() {
 		this.talking.volume = .1;
 	}else{
 		this.talking.mute = false;
-		this.talking.volume = .6;
+		this.talking.volume = .4;
 	}
 
 	//month text
@@ -243,114 +245,116 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
-	if(this.level <= 2){
-		this.idealMusic.stop();
-	}else{
-		this.talking.stop();
-	}
-	this.reportDing.play();
-	this.endFade(this);
-	this.gate.destroy();
-	this.paper.alpha = 0;
-	this.monthText.destroy();
-	this.timerText.destroy();
-	this.quotaText.destroy();
-	this.vettedText.destroy();
-	hoverData.removeText();
-
-	// top portion of report
-	this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
-	this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
-	this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
-	this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
-
-	// bottom portion of report
-	this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
-	this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
-	this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
-
-	// add empty to list of result
-	while(this.result.length < this.quota){
-		this.result.push("empty");
-		this.redBoxes++;
-	}
-
-	// move pickedBoxes into place
-	for(var i = 0; i < this.pickedBoxes.length; i++){
-		var x;
-		var y;
-
-		var xMargin = game.world.width/8;
-		var yMargin = game.world.height/8;
-		if(this.result[i] == 'red'){
-			this.pickedBoxes[i].tint = 0xff0000;
-
-			// keep red squares at lower right corner
-			x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
-			y = game.rnd.between(game.world.height/2 + yMargin, game.world.height - yMargin);
-		} else if(this.result[i] == 'grey'){
-			this.pickedBoxes[i].tint = 0x9C9C9C;
-
-			// keep grey squares at upper right corner
-			x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
-			y = game.rnd.between(yMargin, game.world.height/2 - yMargin);
+	if(this.status != 'end'){
+		if(this.level == 2){
+			// this.idealMusic.stop();
+		}else{
+			this.reportDing.play();
+			this.talking.stop();
 		}
-		this.pickedBoxes[i].x = x;
-		this.pickedBoxes[i].y = y;
-		this.pickedBoxes[i].newDest = [x,y];
+		this.endFade(this);
+		this.gate.destroy();
+		this.paper.alpha = 0;
+		this.monthText.destroy();
+		this.timerText.destroy();
+		this.quotaText.destroy();
+		this.vettedText.destroy();
+		hoverData.removeText();
 
-		// if(i == 1){
-		// 	if(this.result[i-1] == 'red'){
-		// 		this.pickedBoxes[i-1].tint = 0xff0000;
-		// 	}else if(this.result[i-1] == 'grey'){
-		// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
-		// 	}
-		// 	x = game.world.width * (4.3/7)+40;
-		// 	y = this.pickedBoxes[i-1].height*2;
+		// top portion of report
+		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
+		this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
+		this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
+		this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
 
-		// 	this.pickedBoxes[i-1].x = x;
-		// 	this.pickedBoxes[i-1].y = y;
-		// }else{
-		// 	if(this.result[i-1] == 'red'){
-		// 		this.pickedBoxes[i-1].tint = 0xff0000;
-		// 	}else if(this.result[i-1] == 'grey'){
-		// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
-		// 	}
-		// 	x = game.world.width * (4.3/7)+40;
-		// 	y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
+		// bottom portion of report
+		this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
+		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
+		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
-		// 	this.pickedBoxes[i-1].x = x;
-		// 	this.pickedBoxes[i-1].y = y;
-		// }
-		// this.pickedBoxes[i-1].newDest = [x,y];
-	}
+		// add empty to list of result
+		while(this.result.length < this.quota){
+			this.result.push("empty");
+			this.redBoxes++;
+		}
 
-	// scale report
-	for(var i = 0; i < this.result.length; i++){
-		if(this.result[i] == 'grey') this.scaleResultIncrement[0]++;
-		else if(this.result[i] == 'red') this.scaleResultIncrement[1]++;
-		else if(this.result[i] == 'empty') this.scaleResultIncrement[2]++;
-	}
-	this.scaleResultIncrement[3] = this.quota;
-	this.result = [];
-	for(var i = 0; i < this.scaledResult.length; i++){
-		this.result[i] = this.scaleResultIncrement[i];
-		this.scaledResult[i] = this.scaleResultIncrement[i] * this.scaleBy;
-	}
-	console.log('scaleResultIncrement ' + this.scaleResultIncrement);
-	console.log('scaledResult ' + this.scaledResult);
+		// move pickedBoxes into place
+		for(var i = 0; i < this.pickedBoxes.length; i++){
+			var x;
+			var y;
 
-	// go through boxes and stop all clicked boxes and remove all else
-	for(var key in this.boxArr){
-		var arr = this.boxArr[key];
-		console.log(arr[0].name);
-		for(var i = 0; i < arr.length; i++){
-			if(arr[i].inputEnabled){
-				arr[i].death(arr[i]);
-			} else {
-				arr[i].SPEED = 0;
-				arr[i].TURN_RATE = 0;
-				arr[i].angle = 0;
+			var xMargin = game.world.width/8;
+			var yMargin = game.world.height/8;
+			if(this.result[i] == 'red'){
+				this.pickedBoxes[i].tint = 0xff0000;
+
+				// keep red squares at lower right corner
+				x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
+				y = game.rnd.between(game.world.height/2 + yMargin, game.world.height - yMargin);
+			} else if(this.result[i] == 'grey'){
+				this.pickedBoxes[i].tint = 0x9C9C9C;
+
+				// keep grey squares at upper right corner
+				x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
+				y = game.rnd.between(yMargin, game.world.height/2 - yMargin);
+			}
+			this.pickedBoxes[i].x = x;
+			this.pickedBoxes[i].y = y;
+			this.pickedBoxes[i].newDest = [x,y];
+
+			// if(i == 1){
+			// 	if(this.result[i-1] == 'red'){
+			// 		this.pickedBoxes[i-1].tint = 0xff0000;
+			// 	}else if(this.result[i-1] == 'grey'){
+			// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
+			// 	}
+			// 	x = game.world.width * (4.3/7)+40;
+			// 	y = this.pickedBoxes[i-1].height*2;
+
+			// 	this.pickedBoxes[i-1].x = x;
+			// 	this.pickedBoxes[i-1].y = y;
+			// }else{
+			// 	if(this.result[i-1] == 'red'){
+			// 		this.pickedBoxes[i-1].tint = 0xff0000;
+			// 	}else if(this.result[i-1] == 'grey'){
+			// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
+			// 	}
+			// 	x = game.world.width * (4.3/7)+40;
+			// 	y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
+
+			// 	this.pickedBoxes[i-1].x = x;
+			// 	this.pickedBoxes[i-1].y = y;
+			// }
+			// this.pickedBoxes[i-1].newDest = [x,y];
+		}
+
+		// scale report
+		for(var i = 0; i < this.result.length; i++){
+			if(this.result[i] == 'grey') this.scaleResultIncrement[0]++;
+			else if(this.result[i] == 'red') this.scaleResultIncrement[1]++;
+			else if(this.result[i] == 'empty') this.scaleResultIncrement[2]++;
+		}
+		this.scaleResultIncrement[3] = this.quota;
+		this.result = [];
+		for(var i = 0; i < this.scaledResult.length; i++){
+			this.result[i] = this.scaleResultIncrement[i];
+			this.scaledResult[i] = this.scaleResultIncrement[i] * this.scaleBy;
+		}
+		console.log('scaleResultIncrement ' + this.scaleResultIncrement);
+		console.log('scaledResult ' + this.scaledResult);
+
+		// go through boxes and stop all clicked boxes and remove all else
+		for(var key in this.boxArr){
+			var arr = this.boxArr[key];
+			console.log(arr[0].name);
+			for(var i = 0; i < arr.length; i++){
+				if(arr[i].inputEnabled){
+					arr[i].death(arr[i]);
+				} else {
+					arr[i].SPEED = 0;
+					arr[i].TURN_RATE = 0;
+					arr[i].angle = 0;
+				}
 			}
 		}
 	}
@@ -443,8 +447,19 @@ Quota.prototype.endFade = function() {
 	this.fade.alpha = 1;
 	this.fade.scale.setTo(10, 10);
 
-	game.add.tween(this.fade).to( { alpha: 0 }, 4000, "Linear", true, 2000);
-	this.fadeScreen.add(Phaser.Timer.SECOND *5, this.removeFade, this);
+	// var quote = game.add.text(game.world.centerX, game.world.centerY, '\"People are blind to reality and\nonly see what they want to see\"\n-Anonymous',
+	// 	{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+	// quote.font = 'Black Ops One';
+	// quote.anchor.setTo(0.5);
+
+	if(this.level == 2){
+		this.idealMusic.stop();
+		game.add.tween(this.fade).to( { alpha: 0 }, 8000, "Linear", true, 2000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *510, this.removeFade, this);
+	}else{
+		game.add.tween(this.fade).to( { alpha: 0 }, 4000, "Linear", true, 2000);
+		this.fadeScreen.add(Phaser.Timer.SECOND *6, this.removeFade, this);
+	}
 	this.fadeScreen.start();
 };
 Quota.prototype.removeFade = function() {
