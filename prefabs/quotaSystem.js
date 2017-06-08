@@ -42,6 +42,10 @@ var Quota = function(game){
 		this.paper.height = game.world.height;
 		this.paper.width = game.world.width - (game.world.width * (4.35/7));
 
+		//music variables
+		this.idealMusic = this.game.add.audio('gymnopedie');
+		this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
+
 		// set up quotaSystem to start game
     this.status = 'running';
     this.startLevel(this);
@@ -156,6 +160,16 @@ Quota.prototype.startLevel = function() {
 
 		this.paper.alpha = 1;
 
+		this.talking.play();
+
+
+		if(this.level <= 2){
+			this.idealMusic.play();
+			this.talking.volume = .3;
+		}else{
+			this.talking.volume = .6;
+		}
+
 		//month text
 		this.monthText = game.add.text(game.world.width-250, 32,'Month: ' + this.level);
 		this.monthText.font = 'Patrick Hand SC';
@@ -194,6 +208,8 @@ Quota.prototype.startLevel = function() {
 Quota.prototype.endLevel = function() {
 	console.log('ending level');
 
+	this.music.stop();
+	this.talking.stop();
 	this.endFade(this);
 	this.gate.destroy();
 	this.paper.alpha = 0;
