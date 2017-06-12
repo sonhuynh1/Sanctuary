@@ -40,7 +40,7 @@ var creditsState = {
 
 		var txt = game.add.text(button.x, button.y, string,
 		{font:"30pt",fill:"#19cb65", align:"center"});
-		txt.font = 'Days One';
+		txt.font = 'Black Ops One';
 		txt.anchor.setTo(0.5, 0.5);
 	},
 };

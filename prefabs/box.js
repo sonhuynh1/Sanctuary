@@ -2,7 +2,7 @@
 var Box = function(game){
 	Phaser.Sprite.call(this,game,
 		game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH),'box');
-	this.ptint = game.rnd.between(0,255);
+	this.ptint = game.rnd.between(100,255);
 	this.tint = this.ptint;
 
 	// enable to be clicked or hovered over
@@ -46,13 +46,13 @@ var Box = function(game){
 	this.body.onWorldBounds.add(newDest,this);
 
 	// define constants that affect motion
-	this.SPEED = 100; // pixels/second
+	this.SPEED = 50; // pixels/second
 	this.TURN_RATE = 50; // degrees/frame
 	this.GOOD = false;
 	this.VETTED = false;
 	this.DESTINATION = [game.rnd.between(lBLW,lBRW),game.rnd.between(lBTH,lBBH)]; // destination
 
-	this.disappearDistance = game.world.width * (4.3/7)-this.width*1.5;
+	this.disappearDistance = game.world.width * (5.3/7)-this.width*1.5;
 };
 
 Box.prototype = Object.create(Phaser.Sprite.prototype);
@@ -133,7 +133,7 @@ function outSprite() {
 function click (box) {
 	console.log('clicked on ' + this.name);
 	//this.tint = 0xff0000;
-	this.SPEED*=5;
+	this.SPEED*=3;
 	this.DESTINATION = [game.world.width+this.width,game.world.height/2];
 	this.inputEnabled = false;
 	this.body.checkCollision.right = false;
@@ -157,7 +157,7 @@ Box.prototype.picked = function(){
 	this.SPEED = 0;
 	this.TURN_RATE = 0;
 	// this.x = -this.width;
-	this.alpha = 0.5;
+	// this.alpha = 0.5;
 	this.angle = 0;
 };
 

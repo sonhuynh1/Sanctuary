@@ -25,10 +25,7 @@ var playState = {
 		game.input.mouse.capture = true;
 
 		// set background color
-		this.game.stage.backgroundColor = 0x8C7B6C;
-		// var background2 = game.add.sprite(0, 0, 'playBackground');// background for title state
-    // 	background2.height = game.height;
-    // 	background2.width = game.width;
+		this.game.stage.backgroundColor = 0x86b74b;
 
 		// make boxes and add them into group
 		boxes = game.add.group();
@@ -39,6 +36,7 @@ var playState = {
 		//==============================================
 		// Create hoverData
 		hoverData = new HoverData(this.game);
+		hoverData.removeText();
 		game.add.existing(hoverData);
 
 		//var gate = game.add.sprite(0, 0, 'gate')

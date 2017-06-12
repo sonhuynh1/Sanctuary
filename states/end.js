@@ -4,22 +4,33 @@ var endSong;
 var endState = {
 	create:function(){
 		// menu text(s)
-		endSong = this.game.add.audio('agniratha');
-		endSong.play('', 0, 0.5, true);
+		//endSong = this.game.add.audio('agniratha');
+		//endSong.play('', 0, 0.5, true);
 
-		var background = game.add.sprite(0, 0, 'background');// background for title state
-    	background.height = game.height;
-    	background.width = game.width;
+		//var background = game.add.sprite(0, 0, 'background');// background for title state
+    	//background.height = game.height;
+    	//background.width = game.width;
 
-		var gameOver = game.add.text(game.world.centerX -250, game.world.centerY - 50,'Game Over',
+    	game.stage.backgroundColor = 0x0000FF;
+
+		var endGameStats = game.add.text(game.world.centerX -250, game.world.centerY - 50,'Total Law Abiding: '+ this.blueBoxTotal,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		gameOver.font = 'Days One';
+		gameOver.font = 'Black Ops One';
 
-		this.createButton(game, "Play Again?", game.world.centerX, game.world.centerY - 150, 360, 100, 
+		var endGameStats = game.add.text(game.world.centerX -250, game.world.centerY - 80,'Total Non-law Abiding: '+ this.redBoxTotal,
+			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
+		gameOver.font = 'Black Ops One';
+
+		var gameOver = game.add.text(game.world.centerX, game.world.centerY,'Game Over\n\nWe live in the age of the refugee, the age of the exile.\n-Ariel Dorfman\n\nClick screen to restart game.',
+			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
+		gameOver.font = 'Black Ops One';
+
+		this.createButton(game, "Credits", game.world.centerX, game.world.centerY - 150, 360, 100, 
 			function(){
-				endSong.stop();
-				this.game.state.start('menu');
+				this.game.state.start('credits');
 			});
+
+		game.input.onDown.add(restart, this);
 	},
 
 	update:function(){
@@ -37,8 +48,11 @@ var endState = {
 
 		var txt = game.add.text(button.x, button.y, string,
 		{font:"30pt",fill:"#19cb65", align:"center"});
-		txt.font = 'Days One';
+		txt.font = 'Black Ops One';
 		txt.anchor.setTo(0.5, 0.5);
 	},
 
+	restart:function(){
+	this.game.state.start('menu');
+	},
 };
