@@ -111,13 +111,14 @@ Quota.prototype.update = function(){
 // function to reset all the variables and boxes from one level to another
 function reset() {
 	console.log('click');
-	if(this.status == 'end') {
+	if(this.status == 'end' && this.faded) {
 		for(var i = 0; i < this.pickedBoxes.length; i++){
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
 
 		this.level++;
 
+		// reset all relevant variables
 		if(this.level > 1) {
 			// clear top portion of report
 			this.quotaText2.destroy();
@@ -140,7 +141,7 @@ function reset() {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
 			} else if (this.level > 2) {
-				this.boxCount *= 2.5 * this.quotaQuotient;
+				this.boxCount *= Math.floor(2.5 * this.quotaQuotient);
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
 			this.result = []; // grey, red, empty
@@ -180,14 +181,20 @@ function reset() {
   			this.endFade(this);
 		}
 	}else if(this.status == 'begin') {
-		this.quote.destroy();
-		this.status = 'running';
-		this.startLevel(this);
+		if(this.level == 3 && !this.terrorMusic.isPlaying){
+			this.quote.destroy();
+			this.status = 'running';
+			this.startLevel(this);	
+		} else {
+			this.quote.destroy();
+			this.status = 'running';
+			this.startLevel(this);
+		}
 	}
 }
 
 Quota.prototype.startLevel = function() {
-	console.log('starting level ' + this.level);
+	console.log('starting level ' + this.level + ' and boxCount is ' + this.boxCount);
 
 	// if(this.level > 1) {
 	// 	// clear top portion of report
