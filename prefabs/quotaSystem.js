@@ -292,6 +292,17 @@ Quota.prototype.endLevel = function() {
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
+		for(var i = 0; i < this.result.length; i++){
+			if(this.result[i] == 'red') { //if the result is red
+				this.count++; //count adds one to itself
+			}
+		}
+
+		if(this.count >= 5){ //if theis count hits the limit
+		this.status = 'end'; // stop time and set level to end
+		this.game.state.start('end');// go to end state
+		}
+
 		// add empty to list of result
 		while(this.result.length < this.quota){
 			this.result.push("empty");
@@ -378,9 +389,7 @@ Quota.prototype.endLevel = function() {
 			}
 		}
 	}
-
-	// stop time and set level to end
-	this.status = 'end';
+		this.status = 'end';
 };
 
 Quota.prototype.createGoalnTime = function() {
@@ -500,13 +509,13 @@ Quota.prototype.removeFade = function() {
 
 	if(this.status == 'b4begin'){
 		if(this.level == 1) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, we will have all the time in the world\nto help',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 1\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
 		}else if(this.level == 2) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'In a utopia, there\'s room for everyone',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 2\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
 		}else if(this.level == 3) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'But reality is different',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 3\nBut reality is different.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 		}else{
 			this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
