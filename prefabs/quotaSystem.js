@@ -182,10 +182,11 @@ function reset() {
 		}
 	}else if(this.status == 'begin') {
 		if(this.level == 3 && !this.terrorMusic.isPlaying){
+			console.log('TerrorMusic isPlaying: ' + this.terrorMusic.isPlaying);
 			this.quote.destroy();
 			this.status = 'running';
-			this.startLevel(this);	
-		} else {
+			this.startLevel(this);
+		} else if (this.level != 3) {
 			this.quote.destroy();
 			this.status = 'running';
 			this.startLevel(this);
@@ -277,7 +278,7 @@ Quota.prototype.endLevel = function() {
 			// this.idealMusic.stop();
 		}else{
 			this.reportDing.play();
-			this.talking.stop();
+			// this.talking.stop();
 		}
 		this.endFade(this);
 		this.gate.destroy();
