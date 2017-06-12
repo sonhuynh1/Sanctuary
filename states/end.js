@@ -13,24 +13,24 @@ var endState = {
 
     	game.stage.backgroundColor = 0x0000FF;
 
-		var endGameStats = game.add.text(game.world.centerX -250, game.world.centerY - 50,'Total Law Abiding: '+ this.blueBoxTotal,
+		var LawAbiding = game.add.text(game.world.centerX -250, game.world.centerY - 50,'Total Law Abiding: '+ this.blueBoxTotal,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		gameOver.font = 'Black Ops One';
+		LawAbiding.font = 'Black Ops One';
 
-		var endGameStats = game.add.text(game.world.centerX -250, game.world.centerY - 80,'Total Non-law Abiding: '+ this.redBoxTotal,
+		var NonLawAbiding = game.add.text(game.world.centerX -250, game.world.centerY - 80,'Total Non-law Abiding: '+ this.redBoxTotal,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		gameOver.font = 'Black Ops One';
+		NonLawAbiding.font = 'Black Ops One';
 
 		var gameOver = game.add.text(game.world.centerX, game.world.centerY,'Game Over\n\nWe live in the age of the refugee, the age of the exile.\n-Ariel Dorfman\n\nClick screen to restart game.',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		gameOver.font = 'Black Ops One';
 
-		this.createButton(game, "Credits", game.world.centerX, game.world.centerY - 150, 360, 100, 
+		this.createButton(game, "Credits", game.world.centerX, game.world.centerY - 150, 360, 100,
 			function(){
 				this.game.state.start('credits');
 			});
 
-		game.input.onDown.add(restart, this);
+		game.input.onDown.add(this.restart, this);
 	},
 
 	update:function(){

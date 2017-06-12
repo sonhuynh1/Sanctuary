@@ -52,6 +52,9 @@ var Quota = function(game){
 	//check if faded out
 	this.faded = false;
 
+	//End game counter
+	this.endCounter = 0;
+
 	// set up quotaSystem to start game
     this.status = 'b4begin';
     this.endFade(this);
@@ -61,7 +64,7 @@ Quota.constructor = Quota;
 Quota.prototype.update = function(){
 	// debugging text to show timer and quota
 	if(this.status == 'running') {
-		if(this.level < 3) {
+		if(this.level < 1) {
 			this.timerText.text = 'Time: ∞';
 		} else {
 			this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
@@ -163,7 +166,7 @@ function reset() {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
 			} else if (this.level > 2) {
-				this.boxCount *= 2;
+				this.boxCount *= 2;//40, 80, 160, 320, 640, 1280, 2560,
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
 			this.result = []; // grey, red, empty
@@ -222,13 +225,11 @@ Quota.prototype.startLevel = function() {
 
 	this.paper.alpha = 1;
 
-	this.talking.play();
-
-
-	if(this.level <= 2){
+	if(this.level == 1){
 		this.idealMusic.play();
+		this.talking.play();
 		this.talking.volume = .1;
-	}else{
+	}else if(this.level >= 3){
 		game.stage.backgroundColor = 0x8C7B6C;
 		this.talking.mute = false;
 		this.talking.volume = .4;
@@ -261,10 +262,16 @@ Quota.prototype.startLevel = function() {
 	this.vettedText.text = vet;
 
     //  start the timer running - this is important!
-    if(this.level > 2){
-		this.timer.loop(2250 * this.boxCount, this.endLevel, this);
-		this.timer.start();
-	}
+    if(this.level > 2 && this.level <= 5){
+			this.timer.loop((10000 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}else if(this.level > 5 && this.level <= 8){
+			this.timer.loop((5000 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}else if(this.level > 8 && this.level < 12){
+			this.timer.loop((1050 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}
 
 	this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
 	this.gate.width = 80;
@@ -278,8 +285,8 @@ Quota.prototype.endLevel = function() {
 			// this.idealMusic.stop();
 		}else{
 			this.reportDing.play();
-			// this.talking.stop();
 		}
+		this.timer.destroy();
 		this.endFade(this);
 		this.gate.destroy();
 		this.paper.alpha = 0;
@@ -300,17 +307,6 @@ Quota.prototype.endLevel = function() {
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
-		for(var i = 0; i < this.result.length; i++){
-			if(this.result[i] == 'red') { //if the result is red
-				this.count++; //count adds one to itself
-			}
-		}
-
-		if(this.count >= 5){ //if theis count hits the limit
-		this.status = 'end'; // stop time and set level to end
-		this.game.state.start('end');// go to end state
-		}
-
 		// add empty to list of result
 		while(this.result.length < this.quota){
 			this.result.push("empty");
@@ -326,6 +322,7 @@ Quota.prototype.endLevel = function() {
 			var yMargin = game.world.height/8;
 			if(this.result[i] == 'red'){
 				this.pickedBoxes[i].tint = 0xff0000;
+				this.endCounter++;
 
 				// keep red squares at lower right corner
 				x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
@@ -397,6 +394,9 @@ Quota.prototype.endLevel = function() {
 			}
 		}
 	}
+	// if(this.endCounter > 10){
+	// 	this.game.state.start('end');
+	// }
 		this.status = 'end';
 };
 
