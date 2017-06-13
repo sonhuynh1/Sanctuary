@@ -11,7 +11,7 @@ var endState = {
     	//background.height = game.height;
     	//background.width = game.width;
 
-    	this.talking.stop();
+    	//this.talking.destroy();
 
     	game.stage.backgroundColor = 0x0000FF;
 

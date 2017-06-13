@@ -296,17 +296,6 @@ Quota.prototype.endLevel = function() {
 		this.vettedText.destroy();
 		hoverData.removeText();
 
-		// top portion of report
-		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
-		this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
-		this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
-		this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
-
-		// bottom portion of report
-		this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
-		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
-		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
-
 		var count = 0;
 		for(var i = 0; i < this.result.length; i++){
 			if(this.result[i] == 'red') { //if the result is red
@@ -319,6 +308,18 @@ Quota.prototype.endLevel = function() {
 		this.status = 'end'; // stop time and set level to end
 		this.game.state.start('end');// go to end state
 		}
+
+		// top portion of report
+		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
+		this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
+		this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
+		this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
+
+		// bottom portion of report
+		this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
+		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
+		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
+
 		// add empty to list of result
 		while(this.result.length < this.quota){
 			this.result.push("empty");
