@@ -3,13 +3,7 @@ var endSong;
 
 var endState = {
 	create:function(){
-		// menu text(s)
-		//endSong = this.game.add.audio('agniratha');
-		//endSong.play('', 0, 0.5, true);
-
-		//var background = game.add.sprite(0, 0, 'background');// background for title state
-    	//background.height = game.height;
-    	//background.width = game.width;
+		// end text(s)
 
     	game.stage.backgroundColor = 0x0000FF;
 
@@ -38,12 +32,9 @@ var endState = {
 	},
 
 	update:function(){
-		// if LMB is clicked, then start game
-		//if(game.input.activePointer.leftButton.isDown){
-		//	game.state.start('play');
-		//}
 	},
 
+	//creates buttons 
 	createButton:function(game, string, x, y, w, h, callback){
 		var button = game.add.button(x, y, 'buttons', callback, this, 2, 1, 0)
 		button.anchor.setTo(0.5, 0.5);

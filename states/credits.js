@@ -1,6 +1,6 @@
 var creditsState = {
 	create:function(){
-		// menu text(s)
+		// credit text(s)
 		var background = game.add.sprite(0, 0, 'background');// background for title state
     	background.height = game.height;
     	background.width = game.width;
@@ -31,6 +31,7 @@ var creditsState = {
 
 	},
 
+	//function to create buttons 
 	createButton:function(game, string, x, y, w, h, callback){
 		var button = game.add.button(x, y, 'buttons', callback, this, 2, 1, 0)
 		button.anchor.setTo(0.5, 0.5);

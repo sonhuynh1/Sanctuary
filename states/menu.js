@@ -41,17 +41,6 @@ var menuState = {
 	},
 
 	update:function(){
-		// if LMB is clicked, then start game
-		//if(game.input.activePointer.leftButton.isDown){
-		//	game.state.start('play');
-		//}
-	},
-
-	songOut:function(){
-
-	},
-
-	songIn:function(){
 
 	},
 
