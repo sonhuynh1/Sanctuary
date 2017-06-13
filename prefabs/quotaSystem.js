@@ -111,13 +111,14 @@ Quota.prototype.update = function(){
 // function to reset all the variables and boxes from one level to another
 function reset() {
 	console.log('click');
-	if(this.status == 'end') {
+	if(this.status == 'end' && this.faded) {
 		for(var i = 0; i < this.pickedBoxes.length; i++){
 			this.pickedBoxes[i].death(this.pickedBoxes[i]);
 		}
 
 		this.level++;
 
+		// reset all relevant variables
 		if(this.level > 1) {
 			// clear top portion of report
 			this.quotaText2.destroy();
@@ -140,7 +141,7 @@ function reset() {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
 			} else if (this.level > 2) {
-				this.boxCount *= 2.5 * this.quotaQuotient;
+				this.boxCount *= Math.floor(2.5 * this.quotaQuotient);
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
 			this.result = []; // grey, red, empty
@@ -180,14 +181,21 @@ function reset() {
   			this.endFade(this);
 		}
 	}else if(this.status == 'begin') {
-		this.quote.destroy();
-		this.status = 'running';
-		this.startLevel(this);
+		if(this.level == 3 && !this.terrorMusic.isPlaying){
+			console.log('TerrorMusic isPlaying: ' + this.terrorMusic.isPlaying);
+			this.quote.destroy();
+			this.status = 'running';
+			this.startLevel(this);
+		} else if (this.level != 3) {
+			this.quote.destroy();
+			this.status = 'running';
+			this.startLevel(this);
+		}
 	}
 }
 
 Quota.prototype.startLevel = function() {
-	console.log('starting level ' + this.level);
+	console.log('starting level ' + this.level + ' and boxCount is ' + this.boxCount);
 
 	// if(this.level > 1) {
 	// 	// clear top portion of report
@@ -270,7 +278,7 @@ Quota.prototype.endLevel = function() {
 			// this.idealMusic.stop();
 		}else{
 			this.reportDing.play();
-			this.talking.stop();
+			// this.talking.stop();
 		}
 		this.endFade(this);
 		this.gate.destroy();
@@ -292,13 +300,15 @@ Quota.prototype.endLevel = function() {
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
+		var count = 0;
 		for(var i = 0; i < this.result.length; i++){
 			if(this.result[i] == 'red') { //if the result is red
-				this.count++; //count adds one to itself
-			}
+				count++; //count adds one to itself
+				var temp = count;
+			}	
 		}
 
-		if(this.count >= 5){ //if theis count hits the limit
+		if(temp >= 4){ //if theis count hits the limit
 		this.status = 'end'; // stop time and set level to end
 		this.game.state.start('end');// go to end state
 		}
@@ -509,16 +519,16 @@ Quota.prototype.removeFade = function() {
 
 	if(this.status == 'b4begin'){
 		if(this.level == 1) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 1\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
 		}else if(this.level == 2) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 2\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
 		}else if(this.level == 3) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 3\nBut reality is different.\n\nClick the screen to continue.',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
 			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 		}else{
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
+			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'Click the screen to continue.',
 			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 		}
 		this.quote.font = 'Black Ops One';
