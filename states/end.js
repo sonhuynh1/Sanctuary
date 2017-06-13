@@ -15,10 +15,6 @@ var endState = {
 
 		var LawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 350,'Total Law Abiding: '+ tempB,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/Polish
 		LawAbiding.font = 'Black Ops One';
 
 		var NonLawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 300,'Total Non-law Abiding: '+ tempR,
@@ -34,20 +30,12 @@ var endState = {
 				this.game.state.start('credits');
 			});
 
-<<<<<<< HEAD
 		this.createButton(game, "Restart", game.world.centerX -100, game.world.centerY +300, 200, 100, 
-=======
-		this.createButton(game, "Restart", game.world.centerX -100, game.world.centerY - 130, 360, 100, 
->>>>>>> refs/remotes/origin/Polish
 			function(){
 				tempB = 0;
 				tempR = 0;
 				this.game.state.start('menu');
 			});
-<<<<<<< HEAD
-=======
-		game.input.onDown.add(this.restart, this);
->>>>>>> refs/remotes/origin/Polish
 	},
 
 	update:function(){

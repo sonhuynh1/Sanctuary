@@ -312,7 +312,6 @@ Quota.prototype.endLevel = function() {
 		this.vettedText.destroy();
 		hoverData.removeText();
 
-<<<<<<< HEAD
 		var countR = 0;
 		var countB = 0;
 		for(var i = 0; i < this.result.length; i++){
@@ -331,8 +330,6 @@ Quota.prototype.endLevel = function() {
 		this.talking.stop();
 		this.game.state.start('end');// go to end state
 		}
-=======
->>>>>>> refs/remotes/origin/Polish
 
 		// top portion of report
 		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);

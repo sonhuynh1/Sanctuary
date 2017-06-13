@@ -38,14 +38,9 @@ var loadState = {
 		this.game.load.audio('ding3','assets/sound/soundfx/Ding 3.mp3');
 		this.game.load.audio('gymnopedie','assets/sound/tracks/Gymnopedie No. 1.mp3');
 		this.game.load.audio('jeux','assets/sound/tracks/Jeux D Enfants.m4a');
-<<<<<<< HEAD
     	this.game.load.audio('terror','assets/sound/tracks/Terror.m4a');
     	this.game.load.audio('tick','assets/sound/soundfx/clock-1.wav');
 
-=======
-		this.game.load.audio('terror','assets/sound/tracks/Terror.m4a');
-		this.game.load.audio('tick','assets/sound/soundfx/clock-1.wav');
->>>>>>> refs/remotes/origin/Polish
 		//  Load the Google WebFont Loader script
 		this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
 	},
