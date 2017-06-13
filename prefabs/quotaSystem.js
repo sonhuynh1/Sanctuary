@@ -9,7 +9,7 @@ var Quota = function(game){
 
     // custom variables for construct
     this.quota = 0;
-	this.quotaQuotient = 0.5;
+		this.quotaQuotient = .5;
     this.level = 1;
 
     // total boxes
@@ -45,12 +45,22 @@ var Quota = function(game){
 
 	//music variables
 	this.idealMusic = this.game.add.audio('gymnopedie');
+	this.idealMusic.loop = true;
 	this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
+	this.talking.loop = true;
 	this.reportDing = this.game.add.audio('ding3');
 	this.terrorMusic = this.game.add.audio('terror');
+	this.tick = this.game.add.audio('tick');
+	this.tick.loop = true;
 
 	//check if faded out
 	this.faded = false;
+
+	//End game counter
+	this.endCounter = 0;
+
+	//picked indexes
+	this.indexes = [];
 
 	// set up quotaSystem to start game
     this.status = 'b4begin';
@@ -61,10 +71,15 @@ Quota.constructor = Quota;
 Quota.prototype.update = function(){
 	// debugging text to show timer and quota
 	if(this.status == 'running') {
-		if(this.level < 3) {
+		if(this.level <= 2) {
 			this.timerText.text = 'Time: ∞';
 		} else {
 			this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
+			if(Math.ceil(this.timer.duration.toFixed(0)/1000) == 10){
+				this.tick.play();
+				this.talking.volume = .1;
+				this.tick.volume = 1;
+			}
 		}
 	} else {
 		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
@@ -86,27 +101,27 @@ Quota.prototype.update = function(){
 	if(this.boxCount == this.pickedBoxes.length && this.status != 'end'){
 		this.endLevel(this);
 	}
-};
 
-// function to scroll the list of boxes at the end of a level
-// function mouseWheel(event) {
-// 	if(quotaSystem.status == 'end'){
-// 		// scroll down
-// 		if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
-// 			((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
-// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-// 				quotaSystem.pickedBoxes[i-1].y -= 15;
-// 			}
-// 		}
-// 		// scroll up
-// 		else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
-// 			((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
-// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-// 				quotaSystem.pickedBoxes[i-1].y += 15;
-// 			}
-// 		}
-// 	}
-// }
+	if(this.pickedBoxes.length > 0 && this.pickedBoxes[this.pickedBoxes.length-1].VETTED == true){
+		var vet = "Vetted: "
+		var size = 0;
+		if(this.vetted.length > 10){
+			size = 10;
+		}else{
+			size = this.vetted.length;
+		}
+		for (var i = 0; i < size; i++) {
+				if(this.pickedBoxes[this.pickedBoxes.length-1].id == this.vetted[i]){
+					vet +="";
+					this.indexes.push(i);
+				}
+				if(this.indexes.indexOf(i) == -1){
+					vet += this.vetted[i] + "\n";
+				}
+		}
+		this.vettedText.text = vet;
+	}
+};
 
 // function to reset all the variables and boxes from one level to another
 function reset() {
@@ -136,29 +151,8 @@ function reset() {
 			this.talking.mute = true;
 			this.terrorMusic.volume = 0.5;
 			this.terrorMusic.play();
-			// this.terrorMusic.stop();
-			if(this.level == 2) {
-				this.boxCount = 10;
-				this.vettedCount = this.boxCount;
-			} else if (this.level > 2) {
-				this.boxCount *= Math.floor(2.5 * this.quotaQuotient);
-				this.vettedCount = this.boxCount * this.quotaQuotient;
-			}
-			this.result = []; // grey, red, empty
-			this.pickedBoxes = [];
-			this.vetted = [];
-			this.boxArr = {};
-			this.scaleResultIncrement = [0,0,0,0];
-	    	this.scaledResult = [0,0,0]; // grey, red, empty
-
-			this.redBoxes = 0;
-			this.greyBoxes = 0;
-			this.monthlyGrade = [];
-			// if(this.faded == true){
-  			this.status = 'b4begin';
-  			this.endFade(this);
-			// }
-		}else{
+			game.stage.backgroundColor = 0x8C7B6C;
+			
 			if(this.level == 2) {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
@@ -166,6 +160,7 @@ function reset() {
 				this.boxCount *= 2;
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
+			this.indexes = [];
 			this.result = []; // grey, red, empty
 			this.pickedBoxes = [];
 			this.vetted = [];
@@ -177,8 +172,45 @@ function reset() {
 			this.greyBoxes = 0;
 			this.monthlyGrade = [];
 
-		    this.status = 'b4begin';
-  			this.endFade(this);
+			if(this.quote.text.length>0){
+	  			this.status = 'b4begin';
+	  			this.endFade(this);
+	  		}else{
+				this.quote.destroy();
+				this.status = 'running';
+				this.startLevel(this);
+	  		}
+		}else{
+			if(this.level == 2) {
+				this.boxCount = 10;
+				this.vettedCount = this.boxCount;
+			}else if(this.level >= 9){
+				this.boxCount *= 1.25;//40, 80, 160, 320, 640, 1280, 2560,
+				this.vettedCount = this.quota * .4;
+			}else if (this.level > 2) {
+				this.boxCount *= 2;//40, 80, 160, 320, 640, 1280, 2560,
+				this.vettedCount = this.quota * .4;
+			}
+			this.indexes = [];
+			this.result = []; // grey, red, empty
+			this.pickedBoxes = [];
+			this.vetted = [];
+			this.boxArr = {};
+			this.scaleResultIncrement = [0,0,0,0];
+	    	this.scaledResult = [0,0,0]; // grey, red, empty
+
+			this.redBoxes = 0;
+			this.greyBoxes = 0;
+			this.monthlyGrade = [];
+
+		    if(this.quote.text.length>0){
+	  			this.status = 'b4begin';
+	  			this.endFade(this);
+	  		}else{
+				this.quote.destroy();
+				this.status = 'running';
+				this.startLevel(this);
+	  		}
 		}
 	}else if(this.status == 'begin') {
 		if(this.level == 3 && !this.terrorMusic.isPlaying){
@@ -197,19 +229,6 @@ function reset() {
 Quota.prototype.startLevel = function() {
 	console.log('starting level ' + this.level + ' and boxCount is ' + this.boxCount);
 
-	// if(this.level > 1) {
-	// 	// clear top portion of report
-	// 	this.quotaText2.destroy();
-	// 	this.totalText.destroy();
-	// 	this.neutralText.destroy();
-	// 	this.badText.destroy();
-
-	// 	// clear bottom portion of report
-	// 	this.scaleQuotaText.destroy();
-	// 	this.scaleNeutralText.destroy();
-	// 	this.scaleBadText.destroy();
-	// }
-
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
 	console.log('scaleBy ' + this.scaleBy);
@@ -222,14 +241,11 @@ Quota.prototype.startLevel = function() {
 
 	this.paper.alpha = 1;
 
-	this.talking.play();
-
-
-	if(this.level <= 2){
+	if(this.level == 1){
 		this.idealMusic.play();
+		this.talking.play();
 		this.talking.volume = .1;
-	}else{
-		game.stage.backgroundColor = 0x8C7B6C;
+	}else if(this.level >= 3){
 		this.talking.mute = false;
 		this.talking.volume = .4;
 	}
@@ -251,20 +267,32 @@ Quota.prototype.startLevel = function() {
 	this.vettedText.font = 'Patrick Hand SC';
 
 	var vet = "Vetted: "
-	for (var i = 0; i < this.vetted.length; i++) {
+	var size = 0;
+	if(this.vetted.length > 10){
+		size = 10;
+	}else{
+		size = this.vetted.length;
+	}
+	for (var i = 0; i < size; i++) {
 			if(i == 0){
 				vet +=  this.vetted[i] + "\n";
 			}else{
-				vet += "														" + this.vetted[i] + "\n";
+				vet += this.vetted[i] + "\n";
 			}
 	}
 	this.vettedText.text = vet;
 
     //  start the timer running - this is important!
-    if(this.level > 2){
-		this.timer.loop(2250 * this.boxCount, this.endLevel, this);
-		this.timer.start();
-	}
+    if(this.level > 2 && this.level <= 5){
+			this.timer.loop((8000 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}else if(this.level > 5 && this.level <= 8){
+			this.timer.loop((2250 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}else if(this.level > 8 && this.level < 12){
+			this.timer.loop((1050 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.start();
+		}
 
 	this.gate = game.add.sprite(game.world.width * (5/7),0,'gate');
 	this.gate.width = 80;
@@ -278,8 +306,10 @@ Quota.prototype.endLevel = function() {
 			// this.idealMusic.stop();
 		}else{
 			this.reportDing.play();
-			// this.talking.stop();
 		}
+		this.timer.destroy();
+
+		this.tick.stop();
 		this.endFade(this);
 		this.gate.destroy();
 		this.paper.alpha = 0;
@@ -288,6 +318,7 @@ Quota.prototype.endLevel = function() {
 		this.quotaText.destroy();
 		this.vettedText.destroy();
 		hoverData.removeText();
+
 
 		// top portion of report
 		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
@@ -299,17 +330,6 @@ Quota.prototype.endLevel = function() {
 		this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
-
-		for(var i = 0; i < this.result.length; i++){
-			if(this.result[i] == 'red') { //if the result is red
-				this.count++; //count adds one to itself
-			}
-		}
-
-		if(this.count >= 5){ //if theis count hits the limit
-		this.status = 'end'; // stop time and set level to end
-		this.game.state.start('end');// go to end state
-		}
 
 		// add empty to list of result
 		while(this.result.length < this.quota){
@@ -326,6 +346,7 @@ Quota.prototype.endLevel = function() {
 			var yMargin = game.world.height/8;
 			if(this.result[i] == 'red'){
 				this.pickedBoxes[i].tint = 0xff0000;
+				this.endCounter++;
 
 				// keep red squares at lower right corner
 				x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
@@ -397,6 +418,9 @@ Quota.prototype.endLevel = function() {
 			}
 		}
 	}
+	// if(this.endCounter > 10){
+	// 	this.game.state.start('end');
+	// }
 		this.status = 'end';
 };
 
@@ -444,6 +468,8 @@ Quota.prototype.createBox = function() {
 		var ran = game.rnd.between(0,5);
 		if(ran == 0){
 			box.GOOD = true;
+		}else{
+			box.GOOD = false;
 		}
 		boxes.add(box);
 		if(this.boxArr[box.name]) {
@@ -496,8 +522,62 @@ Quota.prototype.endFade = function() {
 		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
 	}else if(this.status == 'b4begin'){
 		console.log('fade in begin');
-		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
+		if(this.level == 1){
+			// opening images for level 1
+			if(!this.opCount){
+				this.opCount = 1;
+			}else{
+				this.opCount++;
+			}
+			this.fade.destroy();
+			switch(this.opCount){
+				case 1:
+					this.fade = game.add.sprite(0, 0, 'op1');
+					break;
+				case 2:
+					this.fade = game.add.sprite(0, 0, 'op11');
+					break;
+				case 3:
+					this.fade = game.add.sprite(0, 0, 'op111');
+					break;
+			}
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else if(this.level == 3){
+			// opening images for level 3
+			this.opCount++;
+
+			this.fade.destroy();
+			this.fade = game.add.sprite(0, 0, 'op3');
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else if(this.level == 4){
+			// opening images for level 4
+			this.opCount++;
+
+			this.fade.destroy();
+			this.fade = game.add.sprite(0, 0, 'op4');
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else{
+			game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
+			this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
+		}
 	}else{
 		console.log('fade regular');
 		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
@@ -516,23 +596,35 @@ Quota.prototype.removeFade = function() {
 	this.fade.destroy();
 
 	if(this.status == 'b4begin'){
-		if(this.level == 1) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 1\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
-		}else if(this.level == 2) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 2\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
-		}else if(this.level == 3) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'MONTH 3\nBut reality is different.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+		if(this.level == 1){
+			if(this.opCount != 3){
+				this.endFade(this);
+			}else{
+				this.opCount = 0;
+				this.status = 'begin';
+			}
 		}else{
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
-			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			this.opCount = 0;
+			this.status = 'begin';
 		}
-		this.quote.font = 'Black Ops One';
-		this.quote.anchor.setTo(0.5);
 
-		this.status = 'begin';
+		if(this.opCount == 0){
+			if(this.level == 1) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
+			}else if(this.level == 2) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
+			}else if(this.level == 3) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			}else{
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
+				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			}
+			this.quote.font = 'Black Ops One';
+			this.quote.anchor.setTo(0.5);
+		}
 	}
 
 	console.log('removing fade');
