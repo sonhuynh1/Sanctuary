@@ -536,4 +536,5 @@ Quota.prototype.removeFade = function() {
 	}
 
 	console.log('removing fade');
+	
 };
