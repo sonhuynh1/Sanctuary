@@ -151,7 +151,8 @@ function reset() {
 			this.talking.mute = true;
 			this.terrorMusic.volume = 0.5;
 			this.terrorMusic.play();
-			// this.terrorMusic.stop();
+			game.stage.backgroundColor = 0x8C7B6C;
+			
 			if(this.level == 2) {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
@@ -245,7 +246,6 @@ Quota.prototype.startLevel = function() {
 		this.talking.play();
 		this.talking.volume = .1;
 	}else if(this.level >= 3){
-		game.stage.backgroundColor = 0x8C7B6C;
 		this.talking.mute = false;
 		this.talking.volume = .4;
 	}
