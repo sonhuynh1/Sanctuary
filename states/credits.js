@@ -1,29 +1,30 @@
 var creditsState = {
 	create:function(){
 		// menu text(s)
-		var background = game.add.sprite(0, 0, 'background');// background for title state
-    	background.height = game.height;
-    	background.width = game.width;
+		//var background = game.add.sprite(0, 0, 'background');// background for title state
+    	//background.height = game.height;
+    	//background.width = game.width;
 
-		var name1 = game.add.text(game.world.centerX -350, game.world.centerY - 50,'Son huynh - Programmer',
-			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		name1.font = 'Days One';
+    	game.stage.backgroundColor = 0x0000FF;
 
-		var name2 = game.add.text(game.world.centerX -350, game.world.centerY,'Rahil Bhatnagar - Programmer',
+		var name1 = game.add.text(game.world.centerX -400, game.world.centerY - 50,'Son huynh - Programmer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		name2.font = 'Days One';
+		name1.font = 'Black Ops One';
 
-		var name3 = game.add.text(game.world.centerX -350, game.world.centerY + 50,'Ian Seebach - Researcher, Art/Sound Designer',
+		var name2 = game.add.text(game.world.centerX -400, game.world.centerY,'Rahil Bhatnagar - Programmer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		name3.font = 'Days One';
+		name2.font = 'Black Ops One';
 
-		var name4 = game.add.text(game.world.centerX -350, game.world.centerY + 100,'Joseph Boudeman - Researcher, Programmer',
+		var name3 = game.add.text(game.world.centerX -400, game.world.centerY + 50,'Ian Seebach - Researcher, Art/Sound Designer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
-		name4.font = 'Days One';
+		name3.font = 'Black Ops One';
+
+		var name4 = game.add.text(game.world.centerX -400, game.world.centerY + 100,'Joseph Boudeman - Researcher, Programmer',
+			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
+		name4.font = 'Black Ops One';
 		
-		this.createButton(game, "Return to Menu", game.world.centerX, game.world.centerY - 150, 360, 100, 
+		this.createButton(game, "Restart Game", game.world.centerX, game.world.centerY - 150, 360, 100, 
 			function(){
-				menuSong.stop();
 				this.game.state.start('menu');
 			});
 	},

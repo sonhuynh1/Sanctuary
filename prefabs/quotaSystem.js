@@ -285,10 +285,6 @@ Quota.prototype.endLevel = function() {
 			// this.idealMusic.stop();
 		}else{
 			this.reportDing.play();
-<<<<<<< HEAD
-			// this.talking.stop();
-=======
->>>>>>> origin/Ending
 		}
 		this.timer.destroy();
 		this.endFade(this);
@@ -311,7 +307,6 @@ Quota.prototype.endLevel = function() {
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
 
-<<<<<<< HEAD
 		var count = 0;
 		for(var i = 0; i < this.result.length; i++){
 			if(this.result[i] == 'red') { //if the result is red
@@ -324,9 +319,6 @@ Quota.prototype.endLevel = function() {
 		this.status = 'end'; // stop time and set level to end
 		this.game.state.start('end');// go to end state
 		}
-
-=======
->>>>>>> origin/Ending
 		// add empty to list of result
 		while(this.result.length < this.quota){
 			this.result.push("empty");
