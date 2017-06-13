@@ -162,22 +162,3 @@ Box.prototype.picked = function(){
 	this.TURN_RATE = 0;
 	this.angle = 0;
 };
-
-// // animation of box when trying to enter gate
-// Box.prototype.enterGate = function(box,gate,bool){
-// 	console.log('moving box ' + box.name);
-// 	if(bool){
-// 		console.log('box is moving right');
-// 		for(var i=0;i<20;i++){
-// 			console.log('right ' + box.x);
-// 			box.x += 5;
-// 		}
-// 	}
-// 	else{
-// 		console.log('box is moving left');
-// 		for(var i=0;i<20;i++){
-// 			console.log('left ' + box.x);
-// 			box.x -= 5;
-// 		}
-// 	}
-};

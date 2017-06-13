@@ -30,7 +30,7 @@ var playState = {
 		quotaSystem = new Quota(this.game);
 		game.add.existing(quotaSystem);
 
-		
+
 		// Create hoverData
 		hoverData = new HoverData(this.game);
 		hoverData.removeText();
