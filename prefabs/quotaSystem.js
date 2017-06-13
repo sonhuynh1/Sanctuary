@@ -512,6 +512,7 @@ Quota.prototype.endFade = function() {
 	}else if(this.status == 'b4begin'){
 		console.log('fade in begin');
 		if(this.level == 1){
+			// opening images for level 1
 			if(!this.opCount){
 				this.opCount = 1;
 			}else{
@@ -531,7 +532,32 @@ Quota.prototype.endFade = function() {
 			}
 			this.fade.anchor.setTo(0, 0);
 			this.fade.alpha = 1;
-			// this.fade.scale.setTo(1, 1);
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else if(this.level == 3){
+			// opening images for level 3
+			this.opCount++;
+
+			this.fade.destroy();
+			this.fade = game.add.sprite(0, 0, 'op3');
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else if(this.level == 4){
+			// opening images for level 4
+			this.opCount++;
+
+			this.fade.destroy();
+			this.fade = game.add.sprite(0, 0, 'op4');
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
 			this.fade.width = game.world.width;
 			this.fade.height = game.world.height;
 			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
@@ -567,6 +593,7 @@ Quota.prototype.removeFade = function() {
 				this.status = 'begin';
 			}
 		}else{
+			this.opCount = 0;
 			this.status = 'begin';
 		}
 
