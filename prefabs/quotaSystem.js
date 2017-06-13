@@ -59,6 +59,9 @@ var Quota = function(game){
 	//End game counter
 	this.endCounter = 0;
 
+	//picked indexes
+	this.indexes = [];
+
 	// set up quotaSystem to start game
     this.status = 'b4begin';
     this.endFade(this);
@@ -98,27 +101,27 @@ Quota.prototype.update = function(){
 	if(this.boxCount == this.pickedBoxes.length && this.status != 'end'){
 		this.endLevel(this);
 	}
-};
 
-// function to scroll the list of boxes at the end of a level
-// function mouseWheel(event) {
-// 	if(quotaSystem.status == 'end'){
-// 		// scroll down
-// 		if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_UP &&
-// 			((quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].y) > (game.world.height - quotaSystem.pickedBoxes[quotaSystem.pickedBoxes.length-1].height))) {
-// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-// 				quotaSystem.pickedBoxes[i-1].y -= 15;
-// 			}
-// 		}
-// 		// scroll up
-// 		else if(game.input.mouse.wheelDelta === Phaser.Mouse.WHEEL_DOWN &&
-// 			((quotaSystem.pickedBoxes[0].y) < (quotaSystem.pickedBoxes[0].height))) {
-// 			for(var i = 1; i <= quotaSystem.pickedBoxes.length; i++){
-// 				quotaSystem.pickedBoxes[i-1].y += 15;
-// 			}
-// 		}
-// 	}
-// }
+	if(this.pickedBoxes.length > 0 && this.pickedBoxes[this.pickedBoxes.length-1].VETTED == true){
+		var vet = "Vetted: "
+		var size = 0;
+		if(this.vetted.length > 10){
+			size = 10;
+		}else{
+			size = this.vetted.length;
+		}
+		for (var i = 0; i < size; i++) {
+				if(this.pickedBoxes[this.pickedBoxes.length-1].id == this.vetted[i]){
+					vet +="";
+					this.indexes.push(i);
+				}
+				if(this.indexes.indexOf(i) == -1){
+					vet += this.vetted[i] + "\n";
+				}
+		}
+		this.vettedText.text = vet;
+	}
+};
 
 // function to reset all the variables and boxes from one level to another
 function reset() {
@@ -156,6 +159,7 @@ function reset() {
 				this.boxCount *= 2;
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
+			this.indexes = [];
 			this.result = []; // grey, red, empty
 			this.pickedBoxes = [];
 			this.vetted = [];
@@ -181,6 +185,7 @@ function reset() {
 				this.boxCount *= 2;//40, 80, 160, 320, 640, 1280, 2560,
 				this.vettedCount = this.quota * .4;
 			}
+			this.indexes = [];
 			this.result = []; // grey, red, empty
 			this.pickedBoxes = [];
 			this.vetted = [];
@@ -211,19 +216,6 @@ function reset() {
 
 Quota.prototype.startLevel = function() {
 	console.log('starting level ' + this.level + ' and boxCount is ' + this.boxCount);
-
-	// if(this.level > 1) {
-	// 	// clear top portion of report
-	// 	this.quotaText2.destroy();
-	// 	this.totalText.destroy();
-	// 	this.neutralText.destroy();
-	// 	this.badText.destroy();
-
-	// 	// clear bottom portion of report
-	// 	this.scaleQuotaText.destroy();
-	// 	this.scaleNeutralText.destroy();
-	// 	this.scaleBadText.destroy();
-	// }
 
 	// scale increase by factor;
 	this.scaleBy = Math.ceil(1000000 / this.boxCount);
@@ -264,11 +256,17 @@ Quota.prototype.startLevel = function() {
 	this.vettedText.font = 'Patrick Hand SC';
 
 	var vet = "Vetted: "
-	for (var i = 0; i < this.vetted.length; i++) {
+	var size = 0;
+	if(this.vetted.length > 10){
+		size = 10;
+	}else{
+		size = this.vetted.length;
+	}
+	for (var i = 0; i < size; i++) {
 			if(i == 0){
 				vet +=  this.vetted[i] + "\n";
 			}else{
-				vet += "														" + this.vetted[i] + "\n";
+				vet += this.vetted[i] + "\n";
 			}
 	}
 	this.vettedText.text = vet;
