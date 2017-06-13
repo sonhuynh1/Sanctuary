@@ -511,8 +511,36 @@ Quota.prototype.endFade = function() {
 		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
 	}else if(this.status == 'b4begin'){
 		console.log('fade in begin');
-		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
-		this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
+		if(this.level == 1){
+			if(!this.opCount){
+				this.opCount = 1;
+			}else{
+				this.opCount++;
+			}
+			this.fade.destroy();
+			switch(this.opCount){
+				case 1:
+					this.fade = game.add.sprite(0, 0, 'op1');
+					break;
+				case 2:
+					this.fade = game.add.sprite(0, 0, 'op11');
+					break;
+				case 3:
+					this.fade = game.add.sprite(0, 0, 'op111');
+					break;
+			}
+			this.fade.anchor.setTo(0, 0);
+			this.fade.alpha = 1;
+			// this.fade.scale.setTo(1, 1);
+			this.fade.width = game.world.width;
+			this.fade.height = game.world.height;
+			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+
+			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
+		}else{
+			game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
+			this.fadeScreen.add(Phaser.Timer.SECOND *2, this.removeFade, this);
+		}
 	}else{
 		console.log('fade regular');
 		game.add.tween(this.fade).to( { alpha: 0 }, 1000, "Linear", true, 1000);
@@ -531,23 +559,34 @@ Quota.prototype.removeFade = function() {
 	this.fade.destroy();
 
 	if(this.status == 'b4begin'){
-		if(this.level == 1) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
-		}else if(this.level == 2) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
-		}else if(this.level == 3) {
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
-			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+		if(this.level == 1){
+			if(this.opCount != 3){
+				this.endFade(this);
+			}else{
+				this.opCount = 0;
+				this.status = 'begin';
+			}
 		}else{
-			this.quote = game.add.text(game.world.centerX, game.world.centerY, 'Click the screen to continue.',
-			{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			this.status = 'begin';
 		}
-		this.quote.font = 'Black Ops One';
-		this.quote.anchor.setTo(0.5);
 
-		this.status = 'begin';
+		if(this.opCount == 0){
+			if(this.level == 1) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, we will have all the time in the world\nto help.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
+			}else if(this.level == 2) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nIn a utopia, there\'s room for everyone.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#333013",stroke:"#000000",strokeThickness:0});
+			}else if(this.level == 3) {
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
+				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			}else{
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, 'Click the screen to continue.',
+				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
+			}
+			this.quote.font = 'Black Ops One';
+			this.quote.anchor.setTo(0.5);
+		}
 	}
 
 	console.log('removing fade');
