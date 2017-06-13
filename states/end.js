@@ -11,15 +11,13 @@ var endState = {
     	//background.height = game.height;
     	//background.width = game.width;
 
-    	//this.talking.destroy();
-
     	game.stage.backgroundColor = 0x0000FF;
 
-		var LawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 350,'Total Law Abiding: '+ this.blueBoxTotal,
+		var LawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 350,'Total Law Abiding: '+ tempB,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		LawAbiding.font = 'Black Ops One';
 
-		var NonLawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 300,'Total Non-law Abiding: '+ this.redBoxTotal,
+		var NonLawAbiding = game.add.text(game.world.centerX -700, game.world.centerY - 300,'Total Non-law Abiding: '+ tempR,
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		NonLawAbiding.font = 'Black Ops One';
 
@@ -27,13 +25,15 @@ var endState = {
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		gameOver.font = 'Black Ops One';
 
-		this.createButton(game, "Credits", game.world.centerX +150, game.world.centerY +300, 200, 100,
+		this.createButton(game, "Credits", game.world.centerX +200, game.world.centerY +300, 200, 100,
 			function(){
 				this.game.state.start('credits');
 			});
 
-		this.createButton(game, "Restart", game.world.centerX -150, game.world.centerY +300, 200, 100, 
+		this.createButton(game, "Restart", game.world.centerX -100, game.world.centerY +300, 200, 100, 
 			function(){
+				tempB = 0;
+				tempR = 0;
 				this.game.state.start('menu');
 			});
 	},

@@ -7,11 +7,11 @@ var creditsState = {
 
     	game.stage.backgroundColor = 0x0000FF;
 
-		var name1 = game.add.text(game.world.centerX -400, game.world.centerY - 50,'Son huynh - Programmer',
+		var name1 = game.add.text(game.world.centerX -400, game.world.centerY - 50,'Son huynh - Main Programmer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		name1.font = 'Black Ops One';
 
-		var name2 = game.add.text(game.world.centerX -400, game.world.centerY,'Rahil Bhatnagar - Programmer',
+		var name2 = game.add.text(game.world.centerX -400, game.world.centerY,'Rahil Bhatnagar - Programmer, Level Designer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		name2.font = 'Black Ops One';
 
@@ -23,9 +23,9 @@ var creditsState = {
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		name4.font = 'Black Ops One';
 		
-		this.createButton(game, "Restart Game", game.world.centerX, game.world.centerY - 150, 360, 100, 
+		this.createButton(game, "Go Back", game.world.centerX, game.world.centerY - 150, 360, 100, 
 			function(){
-				this.game.state.start('menu');
+				this.game.state.start('end');
 			});
 	},
 

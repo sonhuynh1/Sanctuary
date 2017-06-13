@@ -1,4 +1,8 @@
 // quota system
+
+var tempR = 0;
+var tempB = 0;
+
 var Quota = function(game){
 	Phaser.Text.call(this,game,
 		0,0,'',
@@ -296,16 +300,22 @@ Quota.prototype.endLevel = function() {
 		this.vettedText.destroy();
 		hoverData.removeText();
 
-		var count = 0;
+		var countR = 0;
+		var countB = 0;
 		for(var i = 0; i < this.result.length; i++){
 			if(this.result[i] == 'red') { //if the result is red
-				count++; //count adds one to itself
-				var temp = count;
+				countR++; //count adds one to itself
+			} else if(this.result[i] == 'grey') { //if the result is red
+				countB++; //count adds one to itself
 			}	
 		}
 
-		if(temp >= 4){ //if theis count hits the limit
+		tempR += countR;
+		tempB += countB;
+
+		if(tempR >= 25){ //if this count hits the limit
 		this.status = 'end'; // stop time and set level to end
+		this.talking.stop();
 		this.game.state.start('end');// go to end state
 		}
 
