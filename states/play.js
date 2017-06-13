@@ -15,7 +15,7 @@ var playState = {
 		// set left box dimensions
 		lBLW = 0; // left box left width coordinate
 		lBTH = 0; // left box top height coordinate
-		lBRW = game.world.width/2.5; // left box right width coordinate
+		lBRW = game.world.width * (5/7); // left box right width coordinate
 		lBBH = game.world.height; // left box bottom height coordinate
 	},
 	create:function(){

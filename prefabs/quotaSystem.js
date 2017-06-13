@@ -9,7 +9,7 @@ var Quota = function(game){
 
     // custom variables for construct
     this.quota = 0;
-	this.quotaQuotient = 0.5;
+		this.quotaQuotient = .5;
     this.level = 1;
 
     // total boxes
@@ -45,10 +45,13 @@ var Quota = function(game){
 
 	//music variables
 	this.idealMusic = this.game.add.audio('gymnopedie');
+	this.idealMusic.loop = true;
 	this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
+	this.talking.loop = true;
 	this.reportDing = this.game.add.audio('ding3');
 	this.terrorMusic = this.game.add.audio('terror');
 	this.tick = this.game.add.audio('tick');
+	this.tick.loop = true;
 
 	//check if faded out
 	this.faded = false;
@@ -65,12 +68,14 @@ Quota.constructor = Quota;
 Quota.prototype.update = function(){
 	// debugging text to show timer and quota
 	if(this.status == 'running') {
-		if(this.level < 1) {
+		if(this.level <= 2) {
 			this.timerText.text = 'Time: ∞';
 		} else {
 			this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
 			if(Math.ceil(this.timer.duration.toFixed(0)/1000) == 10){
 				this.tick.play();
+				this.talking.volume = .1;
+				this.tick.volume = 1;
 			}
 		}
 	} else {
@@ -148,7 +153,7 @@ function reset() {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
 			} else if (this.level > 2) {
-				this.boxCount *= Math.floor(2.5 * this.quotaQuotient);
+				this.boxCount *= 2;
 				this.vettedCount = this.boxCount * this.quotaQuotient;
 			}
 			this.result = []; // grey, red, empty
@@ -169,9 +174,12 @@ function reset() {
 			if(this.level == 2) {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
-			} else if (this.level > 2) {
+			}else if(this.level >= 9){
+				this.boxCount *= 1.25;//40, 80, 160, 320, 640, 1280, 2560,
+				this.vettedCount = this.quota * .4;
+			}else if (this.level > 2) {
 				this.boxCount *= 2;//40, 80, 160, 320, 640, 1280, 2560,
-				this.vettedCount = this.boxCount * this.quotaQuotient;
+				this.vettedCount = this.quota * .4;
 			}
 			this.result = []; // grey, red, empty
 			this.pickedBoxes = [];
@@ -267,10 +275,10 @@ Quota.prototype.startLevel = function() {
 
     //  start the timer running - this is important!
     if(this.level > 2 && this.level <= 5){
-			this.timer.loop((10000 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.loop((8000 * this.boxCount)/this.level, this.endLevel, this);
 			this.timer.start();
 		}else if(this.level > 5 && this.level <= 8){
-			this.timer.loop((5000 * this.boxCount)/this.level, this.endLevel, this);
+			this.timer.loop((2250 * this.boxCount)/this.level, this.endLevel, this);
 			this.timer.start();
 		}else if(this.level > 8 && this.level < 12){
 			this.timer.loop((1050 * this.boxCount)/this.level, this.endLevel, this);
@@ -451,6 +459,8 @@ Quota.prototype.createBox = function() {
 		var ran = game.rnd.between(0,5);
 		if(ran == 0){
 			box.GOOD = true;
+		}else{
+			box.GOOD = false;
 		}
 		boxes.add(box);
 		if(this.boxArr[box.name]) {
