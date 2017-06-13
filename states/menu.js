@@ -67,11 +67,11 @@ var menuState = {
 
 	blackScreen:function(){
 		var title = game.add.text(game.world.centerX, 150, 'Sanctuary',
-			{font:"130pt",fill:"#A08978",stroke:"#000000",strokeThickness:0, opacity: 0.2});
+			{font:"130pt",fill:"#A08978",stroke:"#000000"});
 			title.font = 'Black Ops One';
 			title.anchor.setTo(0.5);
 		var quote = game.add.text(game.world.centerX, game.world.centerY, '\"People are blind to reality and\nonly see what they want to see\"\n-Anonymous',
-			{font:"20pt",fill:"#AAAEAE",stroke:"#000000",strokeThickness:0});
+			{font:"20pt",fill:"#AAAEAE"});
 		quote.font = 'Black Ops One';
 		quote.anchor.setTo(0.5);
 		this.time.events.remove(this.fadeScreen);

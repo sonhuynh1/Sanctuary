@@ -20,10 +20,9 @@ var creditsState = {
 		var name4 = game.add.text(game.world.centerX -350, game.world.centerY + 100,'Joseph Boudeman - Researcher, Programmer',
 			{font:"30pt",fill:"#19cb65",stroke:"#119f4e",strokeThickness:2});
 		name4.font = 'Days One';
-		
-		this.createButton(game, "Return to Menu", game.world.centerX, game.world.centerY - 150, 360, 100, 
+
+		this.createButton(game, "Return to Menu", game.world.centerX, game.world.centerY - 150, 360, 100,
 			function(){
-				menuSong.stop();
 				this.game.state.start('menu');
 			});
 	},

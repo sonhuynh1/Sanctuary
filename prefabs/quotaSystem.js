@@ -58,6 +58,7 @@ var Quota = function(game){
 
 	//End game counter
 	this.endCounter = 0;
+	this.goodCounter = 0;
 
 	//picked indexes
 	this.indexes = [];
@@ -145,6 +146,9 @@ function reset() {
 			this.scaleQuotaText.destroy();
 			this.scaleNeutralText.destroy();
 			this.scaleBadText.destroy();
+			if(this.level > 3){
+				this.warningText.destroy();
+			}
 		}
 
 		if(this.level == 3){
@@ -152,7 +156,7 @@ function reset() {
 			this.terrorMusic.volume = 0.5;
 			this.terrorMusic.play();
 			game.stage.backgroundColor = 0x8C7B6C;
-			
+
 			if(this.level == 2) {
 				this.boxCount = 10;
 				this.vettedCount = this.boxCount;
@@ -283,13 +287,13 @@ Quota.prototype.startLevel = function() {
 	this.vettedText.text = vet;
 
     //  start the timer running - this is important!
-    if(this.level > 2 && this.level <= 5){
-			this.timer.loop((8000 * this.boxCount)/this.level, this.endLevel, this);
+    if(this.level > 2 && this.level <= 4){
+			this.timer.loop((4000 * this.boxCount)/this.level, this.endLevel, this);
 			this.timer.start();
-		}else if(this.level > 5 && this.level <= 8){
+		}else if(this.level > 4 && this.level <= 8){
 			this.timer.loop((2250 * this.boxCount)/this.level, this.endLevel, this);
 			this.timer.start();
-		}else if(this.level > 8 && this.level < 12){
+		}else if(this.level > 8 && this.level <= 12){
 			this.timer.loop((1050 * this.boxCount)/this.level, this.endLevel, this);
 			this.timer.start();
 		}
@@ -322,14 +326,25 @@ Quota.prototype.endLevel = function() {
 
 		// top portion of report
 		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
+		this.quotaText2.font = 'Black Ops One';
 		this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
+		this.totalText.font = 'Black Ops One';
 		this.neutralText = game.add.text(32, this.totalText.y + 32, this.greyBoxes + " Law abiding");
+		this.neutralText.font = 'Black Ops One';
 		this.badText = game.add.text(this.neutralText.x + this.neutralText.width + 32, this.neutralText.y, this.redBoxes + " Unsustainable");
+		this.badText.font = 'Black Ops One';
 
 		// bottom portion of report
 		this.scaleQuotaText = game.add.text(this.quotaText2.x, this.badText.y + 64, "Asylym Seekers: 1 million+");
+		this.scaleQuotaText.font = 'Black Ops One';
 		this.scaleNeutralText = game.add.text(this.scaleQuotaText.x, this.scaleQuotaText.y + 32, "");
+		this.scaleNeutralText.font = 'Black Ops One';
 		this.scaleBadText = game.add.text(this.scaleNeutralText.x + this.scaleNeutralText.width + 32, this.scaleNeutralText.y, "");
+		this.scaleBadText.font = 'Black Ops One';
+
+
+
+
 
 		// add empty to list of result
 		while(this.result.length < this.quota){
@@ -353,6 +368,7 @@ Quota.prototype.endLevel = function() {
 				y = game.rnd.between(game.world.height/2 + yMargin, game.world.height - yMargin);
 			} else if(this.result[i] == 'grey'){
 				this.pickedBoxes[i].tint = 0x9C9C9C;
+				this.goodCounter++;
 
 				// keep grey squares at upper right corner
 				x = game.rnd.between(game.world.width/2 + xMargin, game.world.width - xMargin);
@@ -361,31 +377,21 @@ Quota.prototype.endLevel = function() {
 			this.pickedBoxes[i].x = x;
 			this.pickedBoxes[i].y = y;
 			this.pickedBoxes[i].newDest = [x,y];
-
-			// if(i == 1){
-			// 	if(this.result[i-1] == 'red'){
-			// 		this.pickedBoxes[i-1].tint = 0xff0000;
-			// 	}else if(this.result[i-1] == 'grey'){
-			// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
-			// 	}
-			// 	x = game.world.width * (4.3/7)+40;
-			// 	y = this.pickedBoxes[i-1].height*2;
-
-			// 	this.pickedBoxes[i-1].x = x;
-			// 	this.pickedBoxes[i-1].y = y;
-			// }else{
-			// 	if(this.result[i-1] == 'red'){
-			// 		this.pickedBoxes[i-1].tint = 0xff0000;
-			// 	}else if(this.result[i-1] == 'grey'){
-			// 		this.pickedBoxes[i-1].tint = 0x9C9C9C;
-			// 	}
-			// 	x = game.world.width * (4.3/7)+40;
-			// 	y = this.pickedBoxes[i-2].y + this.pickedBoxes[i-2].height + this.pickedBoxes[i-1].height;
-
-			// 	this.pickedBoxes[i-1].x = x;
-			// 	this.pickedBoxes[i-1].y = y;
-			// }
-			// this.pickedBoxes[i-1].newDest = [x,y];
+		}
+		this.warningText = game.add.text(game.world.centerX/6, game.world.height - 150, "");
+		if(this.endCounter > 5 && this.endCounter <= 50/5){
+			this.warningText = game.add.text(game.world.centerX/6, game.world.height - 150, "Be cautious of who you let in.",{font:"10pt"});
+			this.warningText.font = 'Black Ops One';
+		} else if(this.endCounter > 10 && this.endCounter <= 50/2.5){
+			this.warningText = game.add.text(game.world.centerX/6, game.world.height - 150, "The sanctuary can only sustain so many.",{font:"20pt"});
+			this.warningText.font = 'Black Ops One';
+		}else if(this.endCounter > 20 && this.endCounter <= 50/1.25){
+			this.warningText = game.add.text(game.world.centerX/6, game.world.height - 150, "You need to focus. \n The sanctuary is nearing capaticy.",{font:"20pt"});
+			this.warningText.font = 'Black Ops One';
+		}
+		else if(this.endCounter > 40 && this.endCounter <= 50){
+			this.warningText = game.add.text(game.world.centerX/6, game.world.height - 150, "The end it near.\n We cannot continue for much longer.",{font:"20pt", fill:"#591f0b"});
+			this.warningText.font = 'Black Ops One';
 		}
 
 		// scale report
@@ -418,9 +424,9 @@ Quota.prototype.endLevel = function() {
 			}
 		}
 	}
-	// if(this.endCounter > 10){
-	// 	this.game.state.start('end');
-	// }
+	if(this.endCounter > 1){
+		this.game.state.start('end');
+	}
 		this.status = 'end';
 };
 
@@ -545,7 +551,7 @@ Quota.prototype.endFade = function() {
 			this.fade.alpha = 1;
 			this.fade.width = game.world.width;
 			this.fade.height = game.world.height;
-			game.add.tween(this.fade).to({alpha:0},250, "Linear", true, 3000);
+			game.add.tween(this.fade).to({alpha:0},1000, "Linear", true, 3000);
 
 			this.fadeScreen.add(Phaser.Timer.SECOND *3.25, this.removeFade, this);
 		}else if(this.level == 3){
@@ -619,7 +625,7 @@ Quota.prototype.removeFade = function() {
 				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
 				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 			}else{
-				this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, 'Click to continue.',
 				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 			}
 			this.quote.font = 'Black Ops One';

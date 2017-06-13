@@ -39,8 +39,6 @@ var playState = {
 		hoverData.removeText();
 		game.add.existing(hoverData);
 
-		//var gate = game.add.sprite(0, 0, 'gate')
-
 	},
 	update:function(){
 		// check for collision
