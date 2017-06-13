@@ -48,6 +48,7 @@ var Quota = function(game){
 	this.talking = this.game.add.audio('crowdWhiteNoiseLooped');
 	this.reportDing = this.game.add.audio('ding3');
 	this.terrorMusic = this.game.add.audio('terror');
+	this.tick = this.game.add.audio('tick');
 
 	//check if faded out
 	this.faded = false;
@@ -65,6 +66,9 @@ Quota.prototype.update = function(){
 			this.timerText.text = 'Time: ∞';
 		} else {
 			this.timerText.text = 'Time: ' + Math.ceil(this.timer.duration.toFixed(0)/1000);
+			if(Math.ceil(this.timer.duration.toFixed(0)/1000) == 10){
+				this.tick.play();
+			}
 		}
 	} else {
 		if(this.scaleResultIncrement[0] < this.scaledResult[0]){
@@ -280,6 +284,8 @@ Quota.prototype.endLevel = function() {
 			this.reportDing.play();
 			// this.talking.stop();
 		}
+
+		this.tick.stop();
 		this.endFade(this);
 		this.gate.destroy();
 		this.paper.alpha = 0;
@@ -536,5 +542,5 @@ Quota.prototype.removeFade = function() {
 	}
 
 	console.log('removing fade');
-	
+
 };
