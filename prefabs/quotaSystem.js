@@ -170,10 +170,15 @@ function reset() {
 			this.redBoxes = 0;
 			this.greyBoxes = 0;
 			this.monthlyGrade = [];
-			// if(this.faded == true){
-  			this.status = 'b4begin';
-  			this.endFade(this);
-			// }
+
+			if(this.quote.text.length>0){
+	  			this.status = 'b4begin';
+	  			this.endFade(this);
+	  		}else{
+				this.quote.destroy();
+				this.status = 'running';
+				this.startLevel(this);
+	  		}
 		}else{
 			if(this.level == 2) {
 				this.boxCount = 10;
@@ -197,8 +202,14 @@ function reset() {
 			this.greyBoxes = 0;
 			this.monthlyGrade = [];
 
-		    this.status = 'b4begin';
-  			this.endFade(this);
+		    if(this.quote.text.length>0){
+	  			this.status = 'b4begin';
+	  			this.endFade(this);
+	  		}else{
+				this.quote.destroy();
+				this.status = 'running';
+				this.startLevel(this);
+	  		}
 		}
 	}else if(this.status == 'begin') {
 		if(this.level == 3 && !this.terrorMusic.isPlaying){
@@ -608,7 +619,7 @@ Quota.prototype.removeFade = function() {
 				this.quote = game.add.text(game.world.centerX, game.world.centerY, '\nBut reality is different.\n\nClick the screen to continue.',
 				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 			}else{
-				this.quote = game.add.text(game.world.centerX, game.world.centerY, 'Click the screen to continue.',
+				this.quote = game.add.text(game.world.centerX, game.world.centerY, '',
 				{font:"20pt",fill:"#591f0b",stroke:"#000000",strokeThickness:0});
 			}
 			this.quote.font = 'Black Ops One';
