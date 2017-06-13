@@ -302,6 +302,7 @@ Quota.prototype.endLevel = function() {
 		this.vettedText.destroy();
 		hoverData.removeText();
 
+
 		// top portion of report
 		this.quotaText2 = game.add.text(32, 32, "Asylym Seekers: " + this.boxCount + "   Quota: " + this.quota);
 		this.totalText = game.add.text(32, this.quotaText2.y + 32, "Persons picked: " + this.pickedBoxes.length);
