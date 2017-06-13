@@ -22,6 +22,7 @@ var loadState = {
 		// load in assets
 		this.game.load.image('box','assets/imgs/box.jpg');
 		this.game.load.image('black','assets/imgs/Grey.png');
+		this.game.load.image('background','assets/imgs/Sanctuary_Dirt.png');
 		this.game.load.image('paper','assets/imgs/paper.jpg');
 		this.game.load.image('gate','assets/imgs/Sanctuary_Gate.png');
 		this.game.load.image('op1','assets/imgs/CG1_filter.png');
